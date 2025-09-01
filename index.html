@@ -78,6 +78,8 @@
             transform: translateY(-5px) scale(1.02);
             box-shadow: 0 0 15px rgba(88, 166, 255, 0.4);
             border-color: #58a6ff;
+            z-index: 10;
+            position: relative;
         }
         .skill-tag {
             transition: background-color 0.3s ease, color 0.3s ease, transform 0.3s ease;
@@ -197,13 +199,75 @@
         @keyframes glitch-anim-2 {
             0% { clip-path: inset(70% 0 15% 0); } 20% { clip-path: inset(20% 0 70% 0); } 40% { clip-path: inset(65% 0 5% 0); } 60% { clip-path: inset(30% 0 55% 0); } 80% { clip-path: inset(90% 0 2% 0); } 100% { clip-path: inset(40% 0 38% 0); }
         }
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0,0,0,0.8); }
-        .modal-content { background-color: #161b22; margin: 10% auto; padding: 2rem; border: 1px solid #58a6ff; width: 80%; max-width: 700px; border-radius: 8px; position: relative; animation: slide-in 0.5s ease-out; }
-        @keyframes slide-in { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-        .close-button { color: #aaa; position: absolute; top: 10px; right: 20px; font-size: 28px; font-weight: bold; }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #161b22;
+            padding: 2.5rem;
+            border: 1px solid #58a6ff;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 12px;
+            position: relative;
+            transform: translateX(100%);
+            opacity: 0;
+            transition: transform 0.5s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
+        }
+        .modal.active .modal-content {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        #modal-cert-image {
+            transform: scale(0.9);
+            transition: transform 0.5s 0.2s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+         .modal.active #modal-cert-image {
+            transform: scale(1);
+        }
+
+        .close-button { color: #aaa; position: absolute; top: 15px; right: 25px; font-size: 35px; font-weight: bold; }
         .close-button:hover, .close-button:focus { color: #58a6ff; }
         .social-icon { color: #c9d1d9; transition: color 0.3s ease, transform 0.3s ease, filter 0.3s ease; }
         .social-icon:hover { transform: scale(1.1) translateY(-3px); color: #58a6ff; filter: drop-shadow(0 0 8px #58a6ff); }
+        
+        #certificates-container {
+            max-height: 800px; /* Adjust based on 2 rows of cards */
+            overflow: hidden;
+            position: relative;
+            transition: max-height 0.7s ease-in-out;
+        }
+        #certificates-container.expanded {
+            max-height: 2000px; /* Large enough for all certs */
+        }
+        .certificates-fade {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 200px;
+            background: linear-gradient(to top, #0d1117, transparent);
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+         #certificates-container.expanded + .certificates-fade {
+            opacity: 0;
+        }
+
+
     </style>
 </head>
 <body class="antialiased">
@@ -288,8 +352,18 @@
             
             <section id="certificates" class="mb-16 reveal">
                 <h2 class="glitch-title text-3xl font-bold text-green-400 mb-6 border-b-2 border-green-400/30 pb-2" data-text="./certificates.sh">./certificates.sh</h2>
-                <div id="certificate-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Certificates will be populated by JS -->
+                <div class="relative">
+                    <div id="certificates-container" class="certificates-container">
+                        <div id="certificate-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <!-- Certificates will be populated by JS -->
+                        </div>
+                    </div>
+                    <div class="certificates-fade"></div>
+                     <div id="toggle-certs-wrapper" class="absolute bottom-0 w-full flex justify-center pb-8">
+                        <button id="toggle-certs-btn" class="bg-gray-800 text-green-400 border border-green-400/50 font-bold py-3 px-6 rounded-md hover:bg-green-400/10 transition-colors">
+                            Show All Certificates
+                        </button>
+                    </div>
                 </div>
             </section>
 
@@ -543,7 +617,7 @@
                 outputEl.appendChild(outputLine);
                 setTimeout(() => {
                     mainContentEl.classList.remove('hidden');
-                    handleScrollAnimations();
+                    initializeAllAnimations();
                 }, 500);
             } else {
                  outputLine.innerHTML = `command not found: ${command}`;
@@ -576,19 +650,22 @@
         }
 
         // --- Scroll Reveal & Animation Triggers ---
-        function handleScrollAnimations() {
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    const scrambleEl = entry.target.querySelector('[data-scramble-text]');
+                    if (scrambleEl) { const fx = new TextScramble(scrambleEl); fx.setText(scrambleEl.innerText); }
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.1 });
+
+        function initializeAllAnimations() {
             const revealElements = document.querySelectorAll('.reveal');
-            const revealObserver = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('visible');
-                        const scrambleEl = entry.target.querySelector('[data-scramble-text]');
-                        if (scrambleEl) { const fx = new TextScramble(scrambleEl); fx.setText(scrambleEl.innerText); }
-                        revealObserver.unobserve(entry.target);
-                    }
-                });
-            }, { threshold: 0.2 });
-            revealElements.forEach(el => { revealObserver.observe(el); });
+            revealElements.forEach(el => { 
+                revealObserver.observe(el);
+            });
         }
         
         // --- Parallax Effect for Certificates ---
@@ -606,23 +683,32 @@
         
         // --- Data ---
         const certificatesData = [
-            // Business
-            { title: 'Strategic Management', issuer: 'Copenhagen Business School', verifyLink: 'https://coursera.org/verify/EHYFQ5ZJMM93', imageUrl: 'https://placehold.co/600x400/161b22/89b6e8?text=Strategic+Mgmt' },
-            { title: 'Protecting Business Innovations via Copyright', issuer: 'HKUST', verifyLink: 'https://coursera.org/verify/9P51UP306ZOV', imageUrl: 'https://placehold.co/600x400/161b22/89b6e8?text=Copyright+Law' },
+            // Business & Management
+            { title: 'Strategic Management', issuer: 'Copenhagen Business School', verifyLink: 'https://coursera.org/verify/EHYFQ5ZJMM93', imageUrl: 'certificates/CourseraStrategicManagement.png' },
+            { title: 'Protecting Business Innovations via Copyright', issuer: 'HKUST', verifyLink: 'https://coursera.org/verify/9P51UP306ZOV', imageUrl: 'certificates/CourseraBusinessCopyright.png' },
+
+            // Cybersecurity & Networking
+            { title: 'CCNA: Introduction to Networks', issuer: 'Cisco Netacad', imageUrl: 'certificates/CCNAIntrotoNetworks.png' },
+            { title: 'Cybersecurity Essentials', issuer: 'Cisco', imageUrl: 'certificates/CiscoCyberSecEssentials.png' },
+            { title: 'Cyber Threat Hunting', issuer: 'Infosec', verifyLink: 'https://coursera.org/verify/3WWCXD8VPSUZ', imageUrl: 'certificates/CourseraCyberThreatHunting.png' },
+            { title: 'Threat Investigation', issuer: 'Cisco', verifyLink: 'https://coursera.org/verify/GZ1ND2FRVB04', imageUrl: 'certificates/CourseraThreatInvestigation.png' },
+            { title: 'Usable Security', issuer: 'University of Maryland', verifyLink: 'https://coursera.org/verify/0M5ENHBEVJP4', imageUrl: 'certificates/CourseraUsableSecurity.png' },
+            { title: 'Introduction to Cybersecurity', issuer: 'Cisco Netacad', imageUrl: 'certificates/NetacadIntroToCybersec.png' },
+            { title: 'Networking Support & Security', issuer: 'Cisco', imageUrl: 'certificates/CiscoNetworkSupportSecurity.png' },
             
-            // Security & Core Tech
-            { title: 'Cisco Certified Network Associate (CCNA)', issuer: 'Cisco', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=CCNA' },
-            { title: 'Cyber Threat Hunting', issuer: 'Infosec', verifyLink: 'https://coursera.org/verify/3WWCXD8VPSUZ', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=Threat+Hunting' },
-            { title: 'Threat Investigation', issuer: 'Cisco', verifyLink: 'https://coursera.org/verify/GZ1ND2FRVB04', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=Threat+Investigation' },
-            { title: 'Usable Security', issuer: 'University of Maryland', verifyLink: 'https://coursera.org/verify/0M5ENHBEVJP4', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=Usable+Security' },
-            { title: 'PortSwigger Web Security Academy', issuer: 'PortSwigger', description: 'Successfully completed all core labs, demonstrating proficiency in identifying and exploiting a wide range of web security vulnerabilities.', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=PortSwigger+Labs' },
-            { title: 'Introduction to Data Warehouse Testing', issuer: 'Infosys Springboard', description: 'Completed the course on Data Warehouse Testing.', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=Data+Warehouse' },
-            
+            // Tech & Development
+            { title: 'PCAP: Programming Essentials in Python', issuer: 'Cisco', imageUrl: 'certificates/CiscoPCAPPython.png' },
+            { title: 'Linux Unhatched', issuer: 'Cisco', imageUrl: 'certificates/CiscoLinux.png' },
+            { title: 'Big Data Tools and Components', issuer: 'Simplilearn', imageUrl: 'certificates/SimpliLearnBigDataTools.png' },
+            { title: 'Data Mining', issuer: 'Infosys Springboard', imageUrl: 'certificates/springboardDataMining.png' },
+            { title: 'Introduction to Data Warehouse Testing', issuer: 'Infosys Springboard', imageUrl: 'certificates/springboardDataWarehouseTesting.png' },
+            { title: 'Finite Automata', issuer: 'Infosys Springboard', imageUrl: 'certificates/SpringboardFiniteAutomata.png' },
+
             // Additional Coursework
-            { title: 'Sustainable Food Systems', issuer: 'University of Illinois', verifyLink: 'https://coursera.org/verify/Y803JQBAP9XD', imageUrl: 'https://placehold.co/600x400/161b22/3fb950?text=Sustainable+Systems' },
-            { title: 'Sustainable Tourism', issuer: 'University of Copenhagen', verifyLink: 'https://coursera.org/verify/RE3IZNHZX6U7', imageUrl: 'https://placehold.co/600x400/161b22/3fb950?text=Sustainable+Tourism' },
-            { title: 'Fashion as Design', issuer: 'The Museum of Modern Art', verifyLink: 'https://coursera.org/verify/FFNIQDPLUOZ9', imageUrl: 'https://placehold.co/600x400/161b22/3fb950?text=Fashion+Design' },
-            { title: 'Sit Less, Get Active', issuer: 'The University of Edinburgh', verifyLink: 'https://coursera.org/verify/BVNUROTBBEKT', imageUrl: 'https://placehold.co/600x400/161b22/3fb950?text=Health+%26+Fitness' }
+            { title: 'The Science of Gastronomy', issuer: 'HKUST', imageUrl: 'certificates/CourseraCulinaryArts.png' },
+            { title: 'Fashion as Design', issuer: 'The Museum of Modern Art', verifyLink: 'https://coursera.org/verify/FFNIQDPLUOZ9', imageUrl: 'certificates/CourseraFashionDesign.png' },
+            { title: 'Sit Less, Get Active', issuer: 'The University of Edinburgh', verifyLink: 'https://coursera.org/verify/BVNUROTBBEKT', imageUrl: 'certificates/CourseraPhysicalFitness.png' },
+            { title: 'Sustainable Tourism', issuer: 'University of Copenhagen', verifyLink: 'https://coursera.org/verify/RE3IZNHZX6U7', imageUrl: 'certificates/CourseraSustainableTourism.png' }
         ];
 
         const skillsData = {
@@ -669,6 +755,9 @@
         const interestsGrid = document.getElementById('interests-grid');
         const projectGrid = document.getElementById('project-grid');
         const certificateGrid = document.getElementById('certificate-grid');
+        const certificatesContainer = document.getElementById('certificates-container');
+        const toggleCertsBtn = document.getElementById('toggle-certs-btn');
+        const toggleCertsWrapper = document.getElementById('toggle-certs-wrapper');
 
         function populateSkills() {
             Object.keys(skillsData).forEach((skill, index) => {
@@ -712,10 +801,9 @@
         }
         
         function populateCertificates() {
-            certificatesData.forEach((cert, index) => {
+            const createCard = (cert) => {
                 const card = document.createElement('div');
-                card.className = 'certificate-card h-64 bg-[#161b22]/70 rounded-lg reveal reveal-child flex flex-col justify-end';
-                card.style.transitionDelay = `${index * 100}ms`;
+                card.className = 'certificate-card h-64 bg-[#161b22]/70 rounded-lg flex flex-col justify-end reveal';
                 card.innerHTML = `
                     <div class="card-bg" style="background-image: url('${cert.imageUrl}')"></div>
                     <div class="card-content p-4">
@@ -724,9 +812,34 @@
                     </div>
                 `;
                 card.addEventListener('click', () => openDetailModal(cert));
+                return card;
+            };
+
+            certificatesData.forEach((cert) => {
+                const card = createCard(cert);
                 certificateGrid.appendChild(card);
             });
+            
+            if (certificatesData.length <= 6) {
+                 toggleCertsWrapper.style.display = 'none';
+                 certificatesContainer.classList.add('expanded');
+            }
         }
+
+        toggleCertsBtn.addEventListener('click', () => {
+            const isExpanded = certificatesContainer.classList.toggle('expanded');
+            if (isExpanded) {
+                toggleCertsBtn.textContent = 'Show Less';
+                const allCards = certificateGrid.children;
+                 for (let i = 0; i < allCards.length; i++) {
+                    revealObserver.observe(allCards[i]);
+                }
+            } else {
+                toggleCertsBtn.textContent = 'Show All Certificates';
+                lenis.scrollTo('#certificates', { offset: -100 });
+            }
+        });
+
 
         // --- Modal Logic ---
         const modal = document.getElementById('detail-modal');
@@ -768,10 +881,19 @@
                 modalDetails.style.display = 'none';
                 modalCertDetails.style.display = 'none';
             }
-            modal.style.display = 'block';
+            modal.style.display = 'flex';
+            setTimeout(() => modal.classList.add('active'), 10);
         }
-        closeButton.onclick = () => { modal.style.display = 'none'; }
-        window.onclick = (event) => { if (event.target == modal) { modal.style.display = 'none'; } }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            setTimeout(() => {
+                modal.style.display = 'none';
+            }, 500);
+        }
+
+        closeButton.onclick = closeModal;
+        window.onclick = (event) => { if (event.target == modal) { closeModal(); } }
         
         // --- Initial Load ---
         document.addEventListener('DOMContentLoaded', () => {
@@ -789,6 +911,7 @@
             populateProjects();
             populateCertificates();
             updateInteractiveElements();
+            initializeAllAnimations();
         });
     </script>
 </body>
