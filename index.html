@@ -40,7 +40,7 @@
             box-shadow: 0 0 20px rgba(0, 255, 0, 0.1);
         }
         .prompt::before {
-            content: 'irfan@portfolio:~$ ';
+            content: 'irfan@:~$ ';
             color: #58a6ff;
         }
         .cursor {
@@ -695,31 +695,31 @@
         // --- Data ---
         const certificatesData = [
             // Business & Management
-            { title: 'Strategic Management', issuer: 'Copenhagen Business School', verifyLink: 'https://coursera.org/verify/EHYFQ5ZJMM93', imageUrl: 'certificates/CourseraStrategicManagement.png' },
-            { title: 'Protecting Business Innovations via Copyright', issuer: 'HKUST', verifyLink: 'https://coursera.org/verify/9P51UP306ZOV', imageUrl: 'certificates/CourseraBusinessCopyright.png' },
+            { title: 'Strategic Management', issuer: 'Copenhagen Business School', verifyLink: 'https://coursera.org/verify/EHYFQ5ZJMM93', imageUrl: 'damha.space/certificates/CourseraStrategicManagement.png' },
+            { title: 'Protecting Business Innovations via Copyright', issuer: 'HKUST', verifyLink: 'https://coursera.org/verify/9P51UP306ZOV', imageUrl: 'damha.space/certificates/CourseraBusinessCopyright.png' },
 
             // Cybersecurity & Networking
-            { title: 'CCNA: Introduction to Networks', issuer: 'Cisco Netacad', imageUrl: 'certificates/CCNAIntrotoNetworks.png' },
-            { title: 'Cybersecurity Essentials', issuer: 'Cisco', imageUrl: 'certificates/CiscoCyberSecEssentials.png' },
-            { title: 'Cyber Threat Hunting', issuer: 'Infosec', verifyLink: 'https://coursera.org/verify/3WWCXD8VPSUZ', imageUrl: 'certificates/CourseraCyberThreatHunting.png' },
-            { title: 'Threat Investigation', issuer: 'Cisco', verifyLink: 'https://coursera.org/verify/GZ1ND2FRVB04', imageUrl: 'certificates/CourseraThreatInvestigation.png' },
-            { title: 'Usable Security', issuer: 'University of Maryland', verifyLink: 'https://coursera.org/verify/0M5ENHBEVJP4', imageUrl: 'certificates/CourseraUsableSecurity.png' },
-            { title: 'Introduction to Cybersecurity', issuer: 'Cisco Netacad', imageUrl: 'certificates/NetacadIntroToCybersec.png' },
-            { title: 'Networking Support & Security', issuer: 'Cisco', imageUrl: 'certificates/CiscoNetworkSupportSecurity.png' },
+            { title: 'CCNA: Introduction to Networks', issuer: 'Cisco Netacad', imageUrl: 'damha.space/certificates/CCNAIntrotoNetworks.png' },
+            { title: 'Cybersecurity Essentials', issuer: 'Cisco', imageUrl: 'damha.space/certificates/CiscoCyberSecEssentials.png' },
+            { title: 'Cyber Threat Hunting', issuer: 'Infosec', verifyLink: 'https://coursera.org/verify/3WWCXD8VPSUZ', imageUrl: 'damha.space/certificates/CourseraCyberThreatHunting.png' },
+            { title: 'Threat Investigation', issuer: 'Cisco', verifyLink: 'https://coursera.org/verify/GZ1ND2FRVB04', imageUrl: 'damha.space/certificates/CourseraThreatInvestigation.png' },
+            { title: 'Usable Security', issuer: 'University of Maryland', verifyLink: 'https://coursera.org/verify/0M5ENHBEVJP4', imageUrl: 'damha.space/certificates/CourseraUsableSecurity.png' },
+            { title: 'Introduction to Cybersecurity', issuer: 'Cisco Netacad', imageUrl: 'damha.space/certificates/NetacadIntroToCybersec.png' },
+            { title: 'Networking Support & Security', issuer: 'Cisco', imageUrl: 'damha.space/certificates/CiscoNetworkSupportSecurity.png' },
             
             // Tech & Development
-            { title: 'PCAP: Programming Essentials in Python', issuer: 'Cisco', imageUrl: 'certificates/CiscoPCAPPython.png' },
-            { title: 'NDG Linux Unhatched', issuer: 'Cisco', imageUrl: 'certificates/CiscoLinux.png' },
-            { title: 'Big Data Tools and Components', issuer: 'Simplilearn', imageUrl: 'certificates/SimpliLearnBigDataTools.png' },
-            { title: 'Data Mining', issuer: 'Infosys Springboard', imageUrl: 'certificates/springboardDataMining.png' },
-            { title: 'Introduction to Data Warehouse Testing', issuer: 'Infosys Springboard', imageUrl: 'certificates/springboardDataWarehouseTesting.png' },
-            { title: 'Finite Automata', issuer: 'Infosys Springboard', imageUrl: 'certificates/SpringboardFiniteAutomata.png' },
+            { title: 'PCAP: Programming Essentials in Python', issuer: 'Cisco', imageUrl: 'damha.space/certificates/CiscoPCAPPython.png' },
+            { title: 'NDG Linux Unhatched', issuer: 'Cisco', imageUrl: 'damha.space/certificates/CiscoLinux.png' },
+            { title: 'Big Data Tools and Components', issuer: 'Simplilearn', imageUrl: 'damha.space/certificates/SimpliLearnBigDataTools.png' },
+            { title: 'Data Mining', issuer: 'Infosys Springboard', imageUrl: 'damha.space/certificates/springboardDataMining.png' },
+            { title: 'Introduction to Data Warehouse Testing', issuer: 'Infosys Springboard', imageUrl: 'damha.space/certificates/springboardDataWarehouseTesting.png' },
+            { title: 'Finite Automata', issuer: 'Infosys Springboard', imageUrl: 'damha.space/certificates/SpringboardFiniteAutomata.png' },
 
             // Additional Coursework
-            { title: 'The Science of Gastronomy', issuer: 'HKUST', imageUrl: 'certificates/CourseraCulinaryArts.png' },
-            { title: 'Fashion as Design', issuer: 'The Museum of Modern Art', verifyLink: 'https://coursera.org/verify/FFNIQDPLUOZ9', imageUrl: 'certificates/CourseraFashionDesign.png' },
-            { title: 'Sit Less, Get Active', issuer: 'The University of Edinburgh', verifyLink: 'https://coursera.org/verify/BVNUROTBBEKT', imageUrl: 'certificates/CourseraPhysicalFitness.png' },
-            { title: 'Sustainable Tourism', issuer: 'University of Copenhagen', verifyLink: 'https://coursera.org/verify/RE3IZNHZX6U7', imageUrl: 'certificates/CourseraSustainableTourism.png' }
+            { title: 'The Science of Gastronomy', issuer: 'HKUST', imageUrl: 'damha.space/certificates/CourseraCulinaryArts.png' },
+            { title: 'Fashion as Design', issuer: 'The Museum of Modern Art', verifyLink: 'https://coursera.org/verify/FFNIQDPLUOZ9', imageUrl: 'damha.space/certificates/CourseraFashionDesign.png' },
+            { title: 'Sit Less, Get Active', issuer: 'The University of Edinburgh', verifyLink: 'https://coursera.org/verify/BVNUROTBBEKT', imageUrl: 'damha.space/certificates/CourseraPhysicalFitness.png' },
+            { title: 'Sustainable Tourism', issuer: 'University of Copenhagen', verifyLink: 'https://coursera.org/verify/RE3IZNHZX6U7', imageUrl: 'damha.space/certificates/CourseraSustainableTourism.png' }
         ];
 
         const skillsData = {
@@ -927,4 +927,5 @@
     </script>
 </body>
 </html>
+
 
