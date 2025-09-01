@@ -70,11 +70,11 @@
             );
             z-index: 9999;
         }
-        .clickable-tag, .project-card {
+        .clickable-tag, .project-card, .certificate-card, .experience-card {
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             border: 1px solid #30363d;
         }
-        .clickable-tag:hover, .project-card:hover {
+        .clickable-tag:hover, .project-card:hover, .certificate-card:hover, .experience-card:hover {
             transform: translateY(-5px) scale(1.02);
             box-shadow: 0 0 15px rgba(88, 166, 255, 0.4);
             border-color: #58a6ff;
@@ -86,6 +86,25 @@
             background-color: #58a6ff;
             color: #0d1117;
             transform: scale(1.05);
+        }
+        .certificate-card {
+            overflow: hidden;
+            position: relative;
+        }
+        .certificate-card .card-bg {
+            width: 100%;
+            height: 150%; /* Taller to allow for movement */
+            background-size: cover;
+            background-position: center;
+            position: absolute;
+            top: -25%; /* Start in the middle */
+            left: 0;
+            transition: transform 0.1s linear;
+        }
+        .certificate-card .card-content {
+            position: relative;
+            z-index: 2;
+            background: linear-gradient(to top, rgba(22, 27, 34, 1) 20%, rgba(22, 27, 34, 0.8) 70%, rgba(22, 27, 34, 0.4));
         }
         #matrix-canvas {
             position: fixed;
@@ -228,7 +247,7 @@
                  <h2 class="glitch-title text-3xl font-bold text-green-400 mb-6 border-b-2 border-green-400/30 pb-2" data-text="./resume.sh">./resume.sh</h2>
                  <div class="bg-[#161b22]/70 p-6 sm:p-8 rounded-md border border-gray-700 text-center">
                     <p class="text-lg mb-6">For a detailed, traditional overview of my qualifications and experience, please download my full resume.</p>
-                    <a href="Irfan_Resume.pdf" download class="inline-block bg-green-500 text-gray-900 font-bold py-3 px-6 rounded-md hover:bg-green-400 transition-colors">
+                    <a href="resume.pdf" download class="inline-block bg-green-500 text-gray-900 font-bold py-3 px-6 rounded-md hover:bg-green-400 transition-colors">
                         Download Resume (PDF)
                     </a>
                  </div>
@@ -236,16 +255,41 @@
 
             <section id="experience" class="mb-16 reveal">
                 <h2 class="glitch-title text-3xl font-bold text-green-400 mb-6 border-b-2 border-green-400/30 pb-2" data-text="./experience.sh">./experience.sh</h2>
-                <div class="bg-[#161b22]/70 p-6 sm:p-8 rounded-md border border-gray-700">
-                    <div class="flex flex-col sm:flex-row items-center gap-8">
-                        <img src="\ctrlweb.png" alt="CtrlWeb Logo" class="w-48 h-auto" onerror="this.style.display='none'">
-                        <div>
-                            <h3 class="text-2xl font-bold text-blue-400">Founder, CtrlWeb</h3>
-                            <p class="text-gray-500 mb-2">June 2024 - Present</p>
-                            <p class="text-lg italic text-green-400 mb-4">"Driving Innovation and Growth"</p>
-                            <p class="text-gray-400">As the founder of CtrlWeb, I lead the development and delivery of bespoke SaaS solutions. We specialize in creating static, dynamic, and multi-page websites, including robust e-commerce platforms, custom POS software, and comprehensive HRMS and ERP systems tailored to client needs. Our services also extend to SEO optimization to drive business growth.</p>
+                <div class="space-y-8">
+                     <!-- CtrlWeb Role -->
+                    <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.1s;">
+                        <div class="flex flex-col sm:flex-row items-center gap-8">
+                            <img src="ctrlweb.png" alt="CtrlWeb Logo" class="w-48 h-auto">
+                            <div>
+                                <h3 class="text-2xl font-bold text-blue-400">Founder, CtrlWeb</h3>
+                                <p class="text-gray-500 mb-2">June 2024 - Present</p>
+                                <p class="text-lg italic text-green-400 mb-4">"Driving Innovation and Growth"</p>
+                                <p class="text-gray-400">As the founder of CtrlWeb, I lead the development and delivery of bespoke SaaS solutions. We specialize in creating static, dynamic, and multi-page websites, including robust e-commerce platforms, custom POS software, and comprehensive HRMS and ERP systems tailored to client needs. Our services also extend to SEO optimization to drive business growth.</p>
+                            </div>
                         </div>
                     </div>
+                    <!-- E&P Role -->
+                    <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.2s;">
+                        <div class="flex flex-col sm:flex-row items-center gap-8">
+                             <img src="e&p.PNG" alt="E&P Logo" class="w-48 h-auto rounded-lg">
+                            <div>
+                                <h3 class="text-2xl font-bold text-blue-400">System and Network Administrator</h3>
+                                <p class="text-gray-400 mb-4">E&P • Nov 2024 – Sep 2025</p>
+                                <ul class="list-disc list-inside text-gray-400 space-y-2">
+                                    <li>Managed containerized applications and workflows using Docker, enhancing deployment efficiency and scalability for internal and client projects.</li>
+                                    <li>Administered Linux servers and managed a portfolio of 20+ websites on Hostinger Web hosting, handling all aspects of deployment, maintenance, and security.</li>
+                                    <li>Served as the primary point of contact for all IT-related operations, including providing company-wide tech support, modifying the POS software, and SM Management.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section id="certificates" class="mb-16 reveal">
+                <h2 class="glitch-title text-3xl font-bold text-green-400 mb-6 border-b-2 border-green-400/30 pb-2" data-text="./certificates.sh">./certificates.sh</h2>
+                <div id="certificate-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Certificates will be populated by JS -->
                 </div>
             </section>
 
@@ -264,11 +308,6 @@
                         <p class="text-gray-400">Enrolled in B.Tech Computer Science with a specialization in Cyber Security, deepening my academic knowledge in the field.</p>
                     </div>
                     <div class="relative pl-8 sm:pl-16 mb-8 reveal reveal-child" style="--delay: 0.3s;">
-                        <div class="absolute left-0 sm:left-8 top-1 w-4 h-4 bg-green-500 rounded-full -translate-x-1/2"></div>
-                        <h3 class="text-lg font-bold text-blue-400">PortSwigger Web Security Academy</h3>
-                        <p class="text-gray-400">Completed all labs on the PortSwigger Web Security Academy, mastering a comprehensive range of web vulnerabilities and exploitation techniques.</p>
-                    </div>
-                    <div class="relative pl-8 sm:pl-16 mb-8 reveal reveal-child" style="--delay: 0.4s;">
                         <div class="absolute left-0 sm:left-8 top-1 w-4 h-4 bg-green-500 rounded-full -translate-x-1/2"></div>
                         <h3 class="text-lg font-bold text-blue-400">2024: Founded CtrlWeb</h3>
                         <p class="text-gray-400">Launched my own SaaS company to provide professional web development, software solutions, and SEO services to a diverse range of clients.</p>
@@ -317,11 +356,20 @@
         <div class="modal-content">
             <span class="close-button">&times;</span>
             <h3 id="modal-title" class="text-2xl font-bold text-green-400 mb-4"></h3>
+            <p id="modal-issuer" class="text-sm text-gray-400 -mt-3 mb-4"></p>
             <p id="modal-description" class="text-gray-300 mb-4"></p>
             <div id="modal-details">
+                <!-- Project details -->
                 <p class="text-gray-400 mb-4"><strong class="text-blue-400">Role:</strong> <span id="modal-role"></span></p>
                 <div id="modal-tech" class="flex flex-wrap gap-2"></div>
                 <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="mt-6 inline-block text-blue-400 hover:underline">Visit Website &rarr;</a>
+            </div>
+             <div id="modal-certificate-details">
+                 <!-- Certificate details -->
+                 <img id="modal-cert-image" src="" alt="Certificate Image" class="w-full h-auto rounded-md mb-4 border border-gray-600">
+                 <a id="modal-verify-link" href="#" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-400 transition-colors">
+                    Verify Certificate
+                </a>
             </div>
         </div>
     </div>
@@ -375,7 +423,11 @@
         
         // --- Lenis Smooth Scroll ---
         const lenis = new Lenis();
-        function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+        function raf(time) {
+            lenis.raf(time);
+            requestAnimationFrame(raf);
+            handleParallax();
+        }
         requestAnimationFrame(raf);
 
         // --- Mouse Spotlight Effect ---
@@ -400,7 +452,7 @@
         
         function updateInteractiveElements() {
             if (isTouchDevice) return;
-            const interactiveElements = document.querySelectorAll('a, button, .project-card, .skill-tag, .close-button, .clickable-tag, #mute-button');
+            const interactiveElements = document.querySelectorAll('a, button, .project-card, .skill-tag, .close-button, .clickable-tag, #mute-button, .certificate-card, .experience-card');
             interactiveElements.forEach(el => {
                 el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); playHoverSound(); });
                 el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
@@ -539,7 +591,40 @@
             revealElements.forEach(el => { revealObserver.observe(el); });
         }
         
-        // --- Data for Modals ---
+        // --- Parallax Effect for Certificates ---
+        function handleParallax() {
+            const cards = document.querySelectorAll('.certificate-card .card-bg');
+            cards.forEach(card => {
+                const rect = card.parentElement.getBoundingClientRect();
+                const speed = 0.2;
+                const movement = -(rect.top - window.innerHeight / 2) * speed;
+                 // Clamp the movement to prevent the background from moving too far
+                const clampedMovement = Math.max(-50, Math.min(50, movement));
+                card.style.transform = `translateY(${clampedMovement}px)`;
+            });
+        }
+        
+        // --- Data ---
+        const certificatesData = [
+            // Business
+            { title: 'Strategic Management', issuer: 'Copenhagen Business School', verifyLink: 'https://coursera.org/verify/EHYFQ5ZJMM93', imageUrl: 'https://placehold.co/600x400/161b22/89b6e8?text=Strategic+Mgmt' },
+            { title: 'Protecting Business Innovations via Copyright', issuer: 'HKUST', verifyLink: 'https://coursera.org/verify/9P51UP306ZOV', imageUrl: 'https://placehold.co/600x400/161b22/89b6e8?text=Copyright+Law' },
+            
+            // Security & Core Tech
+            { title: 'Cisco Certified Network Associate (CCNA)', issuer: 'Cisco', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=CCNA' },
+            { title: 'Cyber Threat Hunting', issuer: 'Infosec', verifyLink: 'https://coursera.org/verify/3WWCXD8VPSUZ', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=Threat+Hunting' },
+            { title: 'Threat Investigation', issuer: 'Cisco', verifyLink: 'https://coursera.org/verify/GZ1ND2FRVB04', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=Threat+Investigation' },
+            { title: 'Usable Security', issuer: 'University of Maryland', verifyLink: 'https://coursera.org/verify/0M5ENHBEVJP4', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=Usable+Security' },
+            { title: 'PortSwigger Web Security Academy', issuer: 'PortSwigger', description: 'Successfully completed all core labs, demonstrating proficiency in identifying and exploiting a wide range of web security vulnerabilities.', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=PortSwigger+Labs' },
+            { title: 'Introduction to Data Warehouse Testing', issuer: 'Infosys Springboard', description: 'Completed the course on Data Warehouse Testing.', imageUrl: 'https://placehold.co/600x400/161b22/58a6ff?text=Data+Warehouse' },
+            
+            // Additional Coursework
+            { title: 'Sustainable Food Systems', issuer: 'University of Illinois', verifyLink: 'https://coursera.org/verify/Y803JQBAP9XD', imageUrl: 'https://placehold.co/600x400/161b22/3fb950?text=Sustainable+Systems' },
+            { title: 'Sustainable Tourism', issuer: 'University of Copenhagen', verifyLink: 'https://coursera.org/verify/RE3IZNHZX6U7', imageUrl: 'https://placehold.co/600x400/161b22/3fb950?text=Sustainable+Tourism' },
+            { title: 'Fashion as Design', issuer: 'The Museum of Modern Art', verifyLink: 'https://coursera.org/verify/FFNIQDPLUOZ9', imageUrl: 'https://placehold.co/600x400/161b22/3fb950?text=Fashion+Design' },
+            { title: 'Sit Less, Get Active', issuer: 'The University of Edinburgh', verifyLink: 'https://coursera.org/verify/BVNUROTBBEKT', imageUrl: 'https://placehold.co/600x400/161b22/3fb950?text=Health+%26+Fitness' }
+        ];
+
         const skillsData = {
             'Server Management': { title: 'Server Management', description: 'Expertise in setting up, configuring, and maintaining web servers (like Apache/Nginx), including VPS management, domain configuration, DNS, and ensuring high availability and performance.' },
             'Cyber Security': { title: 'Cyber Security', description: 'Specialized knowledge in protecting systems, networks, and programs from digital attacks. Includes vulnerability assessment, penetration testing, secure coding practices, and implementing security protocols like TLS/HTTPS.' },
@@ -574,15 +659,16 @@
             { title: "Bagisto Sales Lead Checkout", url: "#", role: "eCommerce Developer", description: "Customized a Bagisto (Laravel-based) eCommerce platform to bypass the payment gateway. Instead, checkout details are captured and routed directly to the sales team via email and WhatsApp/SMS using a custom 'SalesLeadCheckout' package and Twilio integration.", tech: ["Bagisto", "Laravel", "PHP", "Twilio API"] },
             { title: "n8n Automation Workflows", url: "#", role: "Automation Engineer", description: "Set up and configured n8n instances for both personal business automation and client projects. This involved Docker-compose deployments, ensuring secure configurations with HTTPS and secure cookies, and general troubleshooting.", tech: ["n8n", "Docker", "Workflow Automation"] },
             { title: "NF Solutions Website", url: "#", role: "Frontend & Site Implementer", description: "Designed and deployed a multi-page marketing website for an interior design company in Lucknow. Handled the complete design, content layout, and deployment with a CMS integration.", tech: ["HTML", "CSS", "JavaScript", "CMS"] },
-            { title: "Wokwi ESP32 Experiment", url: "#", role: "Embedded Systems Experimenter", description: "Created a proof-of-concept using an ESP32 on the Wokwi simulator to explore WiFi pentesting functionalities, similar to a WiFi Pineapple, for educational and lab purposes.", tech: ["ESP32", "Wokwi", "Embedded C", "Cyber Security"] },
+            { title: "Royalwood Furniture eCommerce", url: "https://royalwoodfurniture.com", role: "Full-Stack Developer", description: "Developed a complete eCommerce website for a furniture business from the ground up, featuring a full product catalog, shopping cart, and checkout functionality.", tech: ["WordPress", "WooCommerce", "eCommerce", "PHP"] },
             { title: "OpenSourcePOS Integration", url: "#", role: "POS Integrator", description: "Installed and customized OpenSourcePOS for a restaurant client. The project involved domain setup via GoDaddy, server configuration, and tailoring the POS features to meet specific needs like KOT and receipt formats.", tech: ["OpenSourcePOS", "GoDaddy", "Server Setup", "PHP"] },
-            { title: "Click Counter Android App", url: "#", role: "Android Developer", description: "Developed a simple Click Counter Android application and prepared a technical presentation explaining the components and development process, assisting in content and demo planning.", tech: ["Android", "Java/Kotlin", "Mobile Dev"] }
+            { title: "Self-Hosted ERPNext Setup", url: "#", role: "Systems Engineer", description: "Deployed, configured, and maintain a self-hosted instance of ERPNext on a private server. This involved the complete setup and customization of the open-source ERP for business management.", tech: ["ERPNext", "Linux", "Docker", "Self-Hosting"] }
         ];
         
         // --- Population Functions ---
         const skillsGrid = document.getElementById('skills-grid');
         const interestsGrid = document.getElementById('interests-grid');
         const projectGrid = document.getElementById('project-grid');
+        const certificateGrid = document.getElementById('certificate-grid');
 
         function populateSkills() {
             Object.keys(skillsData).forEach((skill, index) => {
@@ -624,33 +710,63 @@
                 projectGrid.appendChild(card);
             });
         }
+        
+        function populateCertificates() {
+            certificatesData.forEach((cert, index) => {
+                const card = document.createElement('div');
+                card.className = 'certificate-card h-64 bg-[#161b22]/70 rounded-lg reveal reveal-child flex flex-col justify-end';
+                card.style.transitionDelay = `${index * 100}ms`;
+                card.innerHTML = `
+                    <div class="card-bg" style="background-image: url('${cert.imageUrl}')"></div>
+                    <div class="card-content p-4">
+                        <h3 class="text-lg font-bold text-blue-400">${cert.title}</h3>
+                        <p class="text-sm text-gray-400">${cert.issuer}</p>
+                    </div>
+                `;
+                card.addEventListener('click', () => openDetailModal(cert));
+                certificateGrid.appendChild(card);
+            });
+        }
 
         // --- Modal Logic ---
         const modal = document.getElementById('detail-modal');
         const modalTitle = document.getElementById('modal-title');
+        const modalIssuer = document.getElementById('modal-issuer');
         const modalDescription = document.getElementById('modal-description');
         const modalDetails = document.getElementById('modal-details');
         const modalRole = document.getElementById('modal-role');
         const modalTech = document.getElementById('modal-tech');
         const modalLink = document.getElementById('modal-link');
+        const modalCertDetails = document.getElementById('modal-certificate-details');
+        const modalCertImage = document.getElementById('modal-cert-image');
+        const modalVerifyLink = document.getElementById('modal-verify-link');
         const closeButton = document.querySelector('.close-button');
 
         function openDetailModal(data) {
             modalTitle.textContent = data.title;
-            modalDescription.textContent = data.description;
+            modalDescription.textContent = data.description || '';
+            modalDescription.style.display = data.description ? 'block' : 'none';
 
-            if (data.role && data.tech) { // It's a project
+            if (data.role) { // Project
+                modalIssuer.style.display = 'none';
+                modalCertDetails.style.display = 'none';
+                modalDetails.style.display = 'block';
                 modalRole.textContent = data.role;
                 modalTech.innerHTML = data.tech.map(t => `<span class="bg-blue-900/50 text-blue-300 text-sm py-1 px-3 rounded-full">${t}</span>`).join('');
-                if (data.url === "#") {
-                    modalLink.style.display = 'none';
-                } else {
-                    modalLink.style.display = 'inline-block';
-                    modalLink.href = data.url;
-                }
-                modalDetails.style.display = 'block';
-            } else { // It's a skill or interest
+                modalLink.style.display = data.url === "#" ? 'none' : 'inline-block';
+                modalLink.href = data.url;
+            } else if (data.issuer) { // Certificate
                 modalDetails.style.display = 'none';
+                modalCertDetails.style.display = 'block';
+                modalIssuer.style.display = 'block';
+                modalIssuer.textContent = `Issued by: ${data.issuer}`;
+                modalCertImage.src = data.imageUrl;
+                modalVerifyLink.style.display = data.verifyLink ? 'inline-block' : 'none';
+                if(data.verifyLink) modalVerifyLink.href = data.verifyLink;
+            } else { // Skill or Interest
+                modalIssuer.style.display = 'none';
+                modalDetails.style.display = 'none';
+                modalCertDetails.style.display = 'none';
             }
             modal.style.display = 'block';
         }
@@ -671,10 +787,10 @@
             populateSkills();
             populateInterests();
             populateProjects();
+            populateCertificates();
             updateInteractiveElements();
         });
     </script>
 </body>
 </html>
-
 
