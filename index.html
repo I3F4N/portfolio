@@ -262,9 +262,20 @@
             background: linear-gradient(to top, #0d1117, transparent);
             pointer-events: none;
             transition: opacity 0.5s ease;
+            z-index: 5;
         }
          #certificates-container.expanded + .certificates-fade {
             opacity: 0;
+        }
+        #toggle-certs-wrapper {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            padding-bottom: 2rem;
+            z-index: 6;
         }
 
 
@@ -684,31 +695,31 @@
         // --- Data ---
         const certificatesData = [
             // Business & Management
-            { title: 'Strategic Management', issuer: 'Copenhagen Business School', verifyLink: 'https://coursera.org/verify/EHYFQ5ZJMM93', imageUrl: '/portfolio/certificates/CourseraStrategicManagement.png' },
-            { title: 'Protecting Business Innovations via Copyright', issuer: 'HKUST', verifyLink: 'https://coursera.org/verify/9P51UP306ZOV', imageUrl: '/portfolio/certificates/CourseraBusinessCopyright.png' },
+            { title: 'Strategic Management', issuer: 'Copenhagen Business School', verifyLink: 'https://coursera.org/verify/EHYFQ5ZJMM93', imageUrl: 'certificates/CourseraStrategicManagement.png' },
+            { title: 'Protecting Business Innovations via Copyright', issuer: 'HKUST', verifyLink: 'https://coursera.org/verify/9P51UP306ZOV', imageUrl: 'certificates/CourseraBusinessCopyright.png' },
 
             // Cybersecurity & Networking
-            { title: 'CCNA: Introduction to Networks', issuer: 'Cisco Netacad', imageUrl: '/portfolio/certificates/CCNAIntrotoNetworks.png' },
-            { title: 'Cybersecurity Essentials', issuer: 'Cisco', imageUrl: '/portfolio/certificates/CiscoCyberSecEssentials.png' },
-            { title: 'Cyber Threat Hunting', issuer: 'Infosec', verifyLink: 'https://coursera.org/verify/3WWCXD8VPSUZ', imageUrl: '/portfolio/certificates/CourseraCyberThreatHunting.png' },
-            { title: 'Threat Investigation', issuer: 'Cisco', verifyLink: 'https://coursera.org/verify/GZ1ND2FRVB04', imageUrl: '/portfolio/certificates/CourseraThreatInvestigation.png' },
-            { title: 'Usable Security', issuer: 'University of Maryland', verifyLink: 'https://coursera.org/verify/0M5ENHBEVJP4', imageUrl: '/portfolio/certificates/CourseraUsableSecurity.png' },
-            { title: 'Introduction to Cybersecurity', issuer: 'Cisco Netacad', imageUrl: '/portfolio/certificates/NetacadIntroToCybersec.png' },
-            { title: 'Networking Support & Security', issuer: 'Cisco', imageUrl: '/portfolio/certificates/CiscoNetworkSupportSecurity.pdf' },
+            { title: 'CCNA: Introduction to Networks', issuer: 'Cisco Netacad', imageUrl: 'certificates/CCNAIntrotoNetworks.png' },
+            { title: 'Cybersecurity Essentials', issuer: 'Cisco', imageUrl: 'certificates/CiscoCyberSecEssentials.png' },
+            { title: 'Cyber Threat Hunting', issuer: 'Infosec', verifyLink: 'https://coursera.org/verify/3WWCXD8VPSUZ', imageUrl: 'certificates/CourseraCyberThreatHunting.png' },
+            { title: 'Threat Investigation', issuer: 'Cisco', verifyLink: 'https://coursera.org/verify/GZ1ND2FRVB04', imageUrl: 'certificates/CourseraThreatInvestigation.png' },
+            { title: 'Usable Security', issuer: 'University of Maryland', verifyLink: 'https://coursera.org/verify/0M5ENHBEVJP4', imageUrl: 'certificates/CourseraUsableSecurity.png' },
+            { title: 'Introduction to Cybersecurity', issuer: 'Cisco Netacad', imageUrl: 'certificates/NetacadIntroToCybersec.png' },
+            { title: 'Networking Support & Security', issuer: 'Cisco', imageUrl: 'certificates/CiscoNetworkSupportSecurity.png' },
             
             // Tech & Development
-            { title: 'PCAP: Programming Essentials in Python', issuer: 'Cisco', imageUrl: '/portfolio/certificates/CiscoPCAPPython.png' },
-            { title: 'Linux Unhatched', issuer: 'Cisco', imageUrl: '/portfolio/certificates/CiscoLinux.png' },
-            { title: 'Big Data Tools and Components', issuer: 'Simplilearn', imageUrl: '/portfolio/certificates/SimpliLearnBigDataTools.png' },
-            { title: 'Data Mining', issuer: 'Infosys Springboard', imageUrl: '/portfolio/certificates/springboardDataMining.png' },
-            { title: 'Introduction to Data Warehouse Testing', issuer: 'Infosys Springboard', imageUrl: '/portfolio/certificates/springboardDataWarehouseTesting.png' },
-            { title: 'Finite Automata', issuer: 'Infosys Springboard', imageUrl: '/portfolio/certificates/SpringboardFiniteAutomata.png' },
+            { title: 'PCAP: Programming Essentials in Python', issuer: 'Cisco', imageUrl: 'certificates/CiscoPCAPPython.png' },
+            { title: 'NDG Linux Unhatched', issuer: 'Cisco', imageUrl: 'certificates/CiscoLinux.png' },
+            { title: 'Big Data Tools and Components', issuer: 'Simplilearn', imageUrl: 'certificates/SimpliLearnBigDataTools.png' },
+            { title: 'Data Mining', issuer: 'Infosys Springboard', imageUrl: 'certificates/springboardDataMining.png' },
+            { title: 'Introduction to Data Warehouse Testing', issuer: 'Infosys Springboard', imageUrl: 'certificates/springboardDataWarehouseTesting.png' },
+            { title: 'Finite Automata', issuer: 'Infosys Springboard', imageUrl: 'certificates/SpringboardFiniteAutomata.png' },
 
             // Additional Coursework
-            { title: 'The Science of Gastronomy', issuer: 'HKUST', imageUrl: '/portfolio/certificates/CourseraCulinaryArts.png' },
-            { title: 'Fashion as Design', issuer: 'The Museum of Modern Art', verifyLink: 'https://coursera.org/verify/FFNIQDPLUOZ9', imageUrl: '/portfolio/certificates/CourseraFashionDesign.png' },
-            { title: 'Sit Less, Get Active', issuer: 'The University of Edinburgh', verifyLink: 'https://coursera.org/verify/BVNUROTBBEKT', imageUrl: '/portfolio/certificates/CourseraPhysicalFitness.png' },
-            { title: 'Sustainable Tourism', issuer: 'University of Copenhagen', verifyLink: 'https://coursera.org/verify/RE3IZNHZX6U7', imageUrl: '/portfolio/certificates/CourseraSustainableTourism.png' }
+            { title: 'The Science of Gastronomy', issuer: 'HKUST', imageUrl: 'certificates/CourseraCulinaryArts.png' },
+            { title: 'Fashion as Design', issuer: 'The Museum of Modern Art', verifyLink: 'https://coursera.org/verify/FFNIQDPLUOZ9', imageUrl: 'certificates/CourseraFashionDesign.png' },
+            { title: 'Sit Less, Get Active', issuer: 'The University of Edinburgh', verifyLink: 'https://coursera.org/verify/BVNUROTBBEKT', imageUrl: 'certificates/CourseraPhysicalFitness.png' },
+            { title: 'Sustainable Tourism', issuer: 'University of Copenhagen', verifyLink: 'https://coursera.org/verify/RE3IZNHZX6U7', imageUrl: 'certificates/CourseraSustainableTourism.png' }
         ];
 
         const skillsData = {
@@ -916,6 +927,4 @@
     </script>
 </body>
 </html>
-
-
 
