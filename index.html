@@ -1082,26 +1082,26 @@
         closeButton.onclick = closeModal;
         window.onclick = (event) => { if (event.target == modal) { closeModal(); } }
         
-        // --- Initial Load ---
-        document.addEventListener('DOMContentLoaded', () => {
-            // Initialize audio on the first user interaction
-            const startAudio = async () => {
-                await Tone.start();
-                audioInitialized = true;
-                document.body.removeEventListener('click', startAudio);
-            };
-            document.body.addEventListener('click', startAudio);
-            
-            type();
-            populateSkills();
-            populateInterests();
-            populateProjects();
-            populateCertificates();
-            updateInteractiveElements();
-        });
+// --- Initial Load ---
+document.addEventListener('DOMContentLoaded', () => {
+    const startAudio = async () => {
+        await Tone.start();
+        audioInitialized = true;
+        document.body.removeEventListener('click', startAudio);
+    };
+    document.body.addEventListener('click', startAudio);
+
+    type();
+    populateSkills();
+    populateInterests();
+    populateProjects();
+    populateCertificates();
+    updateInteractiveElements();
+});
     </script>
 </body>
 </html>
+
 
 
 
