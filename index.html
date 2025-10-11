@@ -277,85 +277,7 @@
             padding-bottom: 2rem;
             z-index: 6;
         }
-        /* Side Navigation */
-        #side-nav-container {
-            position: fixed;
-            top: 50%;
-            left: 0;
-            transform: translateY(-50%);
-            z-index: 1001;
-            height: 300px;
-            width: 250px; /* Increased width for text */
-            pointer-events: none;
-        }
-        #nav-trigger {
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 20px;
-            height: 100px;
-            background-color: rgba(88, 166, 255, 0.2);
-            border: 1px solid rgba(88, 166, 255, 0.4);
-            border-left: none;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            cursor: none;
-            pointer-events: all;
-            transition: all 0.3s ease;
-        }
-        #side-nav-container:hover #nav-trigger {
-            background-color: rgba(88, 166, 255, 0.4);
-        }
-        #side-nav {
-            position: absolute;
-            left: 0;
-            top: 0;
-            height: 100%;
-            width: 100%;
-            background-color: rgba(13, 17, 23, 0.8);
-            backdrop-filter: blur(5px);
-            border: 1px solid #30363d;
-            border-left: none;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            transform: translateX(-100%);
-            transition: transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-            pointer-events: all;
-        }
-        #side-nav-container:hover #side-nav {
-            transform: translateX(0);
-        }
-        .nav-link {
-            color: #c9d1d9;
-            text-decoration: none;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            position: relative;
-            padding-left: 20px;
-        }
-        .nav-link::before {
-            content: '';
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #30363d;
-            transition: all 0.3s ease;
-        }
-        .nav-link:hover, .nav-link.active {
-            color: #58a6ff;
-            transform: scale(1.1) translateX(5px);
-        }
-        .nav-link.active::before,
-        .nav-link:hover::before {
-            background-color: #58a6ff;
-            transform: translateY(-50%) scale(1.5);
-            box-shadow: 0 0 10px #58a6ff;
-        }
+
 
     </style>
 </head>
@@ -364,15 +286,6 @@
     <div class="scanlines"></div>
     <canvas id="matrix-canvas"></canvas>
     <div id="spotlight"></div>
-
-    <div id="side-nav-container" class="hidden">
-        <div id="nav-trigger"></div>
-        <nav id="side-nav">
-            <ul class="flex flex-col items-start justify-center h-full pl-8 space-y-2">
-                <!-- Nav links will be populated by JS -->
-            </ul>
-        </nav>
-    </div>    
 
     <div class="container mx-auto p-4 md:p-8">
         <div class="terminal-window bg-[#0d1117]/80 backdrop-blur-sm rounded-lg overflow-hidden font-mono">
@@ -651,7 +564,7 @@
         
         function updateInteractiveElements() {
             if (isTouchDevice) return;
-            const interactiveElements = document.querySelectorAll('a, button, .project-card, .skill-tag, .close-button, .clickable-tag, #mute-button, .certificate-card, .experience-card, .nav-link, #nav-trigger');
+            const interactiveElements = document.querySelectorAll('a, button, .project-card, .skill-tag, .close-button, .clickable-tag, #mute-button, .certificate-card, .experience-card');
             interactiveElements.forEach(el => {
                 el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); playHoverSound(); });
                 el.addEventListener('mouseleave', () => cursor.classList.remove('hover'));
@@ -741,18 +654,14 @@
                 outputLine.innerHTML = 'Initializing portfolio interface... Success.';
                 outputEl.appendChild(outputLine);
                 setTimeout(() => {
-                    document.getElementById('main-content').classList.remove('hidden');
-                    document.getElementById('side-nav-container').classList.remove('hidden');
-                    populateNav();
-                    initializeScrollspy();
+                    mainContentEl.classList.remove('hidden');
                     initializeAllAnimations();
-                    updateInteractiveElements(); // IMPORTANT: Update listeners after nav is created
                 }, 500);
             } else {
                  outputLine.innerHTML = `command not found: ${command}`;
                  outputEl.appendChild(outputLine);
             }
- 
+        }
         
         // --- Text Scramble / Decryption Effect ---
         class TextScramble {
@@ -899,53 +808,6 @@
         const toggleCertsBtn = document.getElementById('toggle-certs-btn');
         const toggleCertsWrapper = document.getElementById('toggle-certs-wrapper');
 
-        // --- Side Navigation & Scrollspy ---
-        function populateNav() {
-            const sideNavList = document.querySelector('#side-nav ul');
-            if (!sideNavList) return; // Guard clause
-            const sections = document.querySelectorAll('main > section');
-            sections.forEach(section => {
-                const sectionId = section.id;
-                const sectionTitle = section.querySelector('h2').getAttribute('data-text');
-                const li = document.createElement('li');
-                li.innerHTML = `<a href="#${sectionId}" class="nav-link">${sectionTitle}</a>`;
-                sideNavList.appendChild(li);
-            });
-        }
-        
-        function initializeScrollspy() {
-            const navLinks = document.querySelectorAll('.nav-link');
-            const sections = document.querySelectorAll('main > section');
-
-            if (navLinks.length === 0) return; // Guard clause
-
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const id = entry.target.getAttribute('id');
-                        navLinks.forEach(link => {
-                            link.classList.remove('active');
-                            if (link.getAttribute('href') === `#${id}`) {
-                                link.classList.add('active');
-                            }
-                        });
-                    }
-                });
-            }, { rootMargin: '-50% 0px -50% 0px' });
-
-            sections.forEach(section => {
-                observer.observe(section);
-            });
-
-            navLinks.forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const targetId = link.getAttribute('href');
-                    lenis.scrollTo(targetId, { offset: -50 });
-                });
-            });
-        }
-            
         function populateSkills() {
             Object.keys(skillsData).forEach((skill, index) => {
                 const tag = document.createElement('span');
@@ -1082,6 +944,7 @@
         closeButton.onclick = closeModal;
         window.onclick = (event) => { if (event.target == modal) { closeModal(); } }
         
+<<<<<<< HEAD
 // --- Initial Load ---
 document.addEventListener('DOMContentLoaded', () => {
     const startAudio = async () => {
@@ -1098,6 +961,26 @@ document.addEventListener('DOMContentLoaded', () => {
     populateCertificates();
     updateInteractiveElements();
 });
+=======
+        // --- Initial Load ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize audio on the first user interaction
+            const startAudio = async () => {
+                await Tone.start();
+                audioInitialized = true;
+                document.body.removeEventListener('click', startAudio);
+            };
+            document.body.addEventListener('click', startAudio);
+            
+            type();
+            populateSkills();
+            populateInterests();
+            populateProjects();
+            populateCertificates();
+            updateInteractiveElements();
+            initializeAllAnimations();
+        });
+>>>>>>> parent of 010498d (new navbar)
     </script>
 </body>
 </html>
@@ -1113,5 +996,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> parent of 010498d (new navbar)
