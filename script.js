@@ -42,13 +42,23 @@
             playClickSound();
         });
         
-        // --- Lenis Smooth Scroll ---
+        // --- Lenis Smooth Scroll & Visibility Fix ---
+        let isTabActive = true;
+        document.addEventListener("visibilitychange", () => {
+            isTabActive = !document.hidden;
+            if (isTabActive) {
+                lastTime = performance.now(); // Prevent massive time jumps when returning
+            }
+        });
+
         const lenis = new Lenis();
         function raf(time) {
-            lenis.raf(time);
+            if (isTabActive) {
+                lenis.raf(time);
+            }
             requestAnimationFrame(raf);
-            handleParallax();
         }
+        lenis.on('scroll', handleParallax);
         requestAnimationFrame(raf);
 
         // --- Mouse Spotlight Effect ---
@@ -124,7 +134,7 @@
         });
 
         const drawMatrix = (time) => {
-            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+            if (isTabActive && !prefersReducedMotion.matches) {
                 if (time - lastTime > 33) {
                     ctx.fillStyle = 'rgba(13, 17, 23, 0.05)';
                     ctx.fillRect(0, 0, width, height);
@@ -277,10 +287,10 @@
                 GitHub: <a href="https://github.com/i3f4n" target="_blank" class="text-blue-400 hover:underline">i3f4n</a>`;
                 outputEl.appendChild(outputLine);
             } else if (cmdLower === 'cat resume.txt') {
-                outputLine.innerHTML = `Irfan Ahmad - 4th Year CS Engineer<br/>
-                Specialization: Cyber Security<br/>
-                Experience: Co-Founder & CTO @ CtrlWeb, DevOps & IT Lead @ E&P International<br/>
-                Skills: Python, Linux Admin, Pentesting, Docker, AWS`;
+                outputLine.innerHTML = `Irfan Ahmad - Cybersecurity Professional<br/>
+                Specialization: Network Infrastructure & System Deployment<br/>
+                Experience: Sonet Integrated Solutions, CtrlWeb, E&P International<br/>
+                Focus: Secure, scalable, and resilient IT environments.`;
                 outputEl.appendChild(outputLine);
             } else if (cmdLower === '') {
                 // Do nothing on empty command
@@ -357,15 +367,22 @@
         }
         
         // --- Parallax Effect for Certificates ---
+        let certCards = [];
+        const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
         function handleParallax() {
-            const cards = document.querySelectorAll('.certificate-card .card-bg');
-            cards.forEach(card => {
+            if (prefersReducedMotion.matches) return;
+            if (certCards.length === 0) certCards = document.querySelectorAll('.certificate-card .card-bg');
+            
+            const innerHeight = window.innerHeight;
+            certCards.forEach(card => {
                 const rect = card.parentElement.getBoundingClientRect();
-                const speed = 0.2;
-                const movement = -(rect.top - window.innerHeight / 2) * speed;
-                 // Clamp the movement to prevent the background from moving too far
-                const clampedMovement = Math.max(-50, Math.min(50, movement));
-                card.style.transform = `translateY(${clampedMovement}px)`;
+                // Only calculate if the card is in or near the viewport
+                if (rect.top < innerHeight + 200 && rect.bottom > -200) {
+                    const speed = 0.2;
+                    const movement = -(rect.top - innerHeight / 2) * speed;
+                    const clampedMovement = Math.max(-50, Math.min(50, movement));
+                    card.style.transform = `translateY(${clampedMovement}px)`;
+                }
             });
         }
         
@@ -407,6 +424,8 @@
         ];
 
         const skillsData = {
+            'AI & Prompt Engineering': { title: 'AI & Prompt Engineering', description: 'Extensive experience leveraging LLMs (ChatGPT, Claude, Gemini) and AI coding assistants for rapid development, architecture planning, and debugging. Proficient in prompt engineering to automate workflows and optimize code generation.' },
+            'AI-Assisted Development': { title: 'AI-Assisted Development', description: 'Utilizing AI tools to accelerate the software development lifecycle, from generating boilerplate code and writing unit tests to exploring complex algorithmic solutions and diagnosing network security issues.' },
             'Operating Systems': { title: 'Operating Systems', description: 'Experienced in the installation and configuration of several different operating systems across different platforms, and familiar with the file systems of both windows and linux.'},
             'Security & Pentesting': { title: 'Security & Pentesting', description: 'Proficient in threat analysis and mitigation with tools like Microsoft Certified Cybersecurity Analyst suite and Wazuh IDS. Hands-on experience from PortSwigger Web Security Core Labs (SQLi, XSS, CSRF), DDoS Mitigation, and implementing Role-Based Access Control (RBAC) and IdAM.'},
             'Networking & Infrastructure': { title: 'Networking & Infrastructure', description: 'Cisco CCNA certified with strong skills in Linux System Administration, TCP/IP, VLAN, DHCP, DNS, and VPN Setup & Troubleshooting. Experienced in server setup and security hardening.'},
@@ -438,11 +457,13 @@
         };
 
         const projects = [
+            { title: "Enterprise Security Infrastructure (Sonet)", url: "#", role: "Network Infrastructure Consultant", description: "Engineered a highly resilient Hub-and-Spoke enterprise network for Titan Company Ltd. Directed end-to-end Layer 1 to Layer 3 deployment, including precision fiber-optic (OFC) splicing, secure server room architecture, and a 152-node IP CCTV network. Implemented strict VLAN segmentation to neutralize internal threats, successfully mitigating a severe Layer 2 broadcast storm.", tech: ["Cisco", "OFC", "IP CCTV", "VLANs", "STP"] },
+            { title: "Self-Hosted Enterprise Automation (CtrlWeb)", url: "#", role: "Infrastructure Lead", description: "The Architecture: Deployed n8n automation servers strictly on hardened, self-hosted Linux environments to maintain data sovereignty for SME clients. The Security: Configured secure, webhook-driven workflows for encrypted cross-platform transactions, ensuring zero external exposure of core business system endpoints.", tech: ["n8n", "Linux", "Webhooks", "Docker"] },
+            { title: "Secure Multi-Tenant POS Architecture", url: "#", role: "Full-Stack & Security Engineer", description: "The Problem: High-density commercial campuses require POS systems that can handle concurrent transactions offline while maintaining strict data isolation between vendors. The Architecture: Developed a custom POS ecosystem using PHP/JS and Git. The Security: Implemented strict Role-Based Access Control (RBAC), secure session management, and cross-tenant data isolation.", tech: ["PHP", "JavaScript", "MySQL", "RBAC", "Git"] },
             { title: "Pioneer Ceilings", url: "https://pioneerceilings.com", role: "Website Developer & Host Manager", description: "A WordPress site for a ceilings company, utilizing WooCommerce for its product showcase. I handled the complete site setup, theme and plugin configuration, and provide ongoing hosting management.", tech: ["WordPress", "WooCommerce", "Hostinger", "PHP"] },
             { title: "Elephant & Peacock POS", url: "https://eandppos.in", role: "POS Software Developer", description: "A complete, custom-built Point-of-Sale software for a retail client. The system supports multiple outlets, receipt and Kitchen Order Ticket (KOT) printing, and the entire codebase is version-controlled with Git.", tech: ["Custom POS", "PHP", "JavaScript", "Git", "MySQL"] },
             { title: "eandp.in eCommerce", url: "https://eandp.in", role: "eCommerce Developer", description: "Developed and deployed a clothing retail eCommerce website. Managed domain purchasing and hosting, utilizing Wix as the site builder for certain workflows while managing multiple related sites on Hostinger.", tech: ["Wix", "eCommerce", "Hostinger", "Domain Mgmt"] },
             { title: "Bagisto Sales Lead Checkout", url: "#", role: "eCommerce Developer", description: "Customized a Bagisto (Laravel-based) eCommerce platform to bypass the payment gateway. Instead, checkout details are captured and routed directly to the sales team via email and WhatsApp/SMS using a custom 'SalesLeadCheckout' package and Twilio integration.", tech: ["Bagisto", "Laravel", "PHP", "Twilio API"] },
-            { title: "n8n Automation Workflows", url: "#", role: "Automation Engineer", description: "Set up and configured n8n instances for both personal business automation and client projects. This involved Docker-compose deployments, ensuring secure configurations with HTTPS and secure cookies, and general troubleshooting.", tech: ["n8n", "Docker", "Workflow Automation"] },
             { title: "NF Solutions Website", url: "#", role: "Frontend & Site Implementer", description: "Designed and deployed a multi-page marketing website for an interior design company in Lucknow. Handled the complete design, content layout, and deployment with a CMS integration.", tech: ["HTML", "CSS", "JavaScript", "CMS"] },
             { title: "Royalwood Furniture eCommerce", url: "https://royalwoodfurniture.com", role: "Full-Stack Developer", description: "Developed a complete eCommerce website for a furniture business from the ground up, featuring a full product catalog, shopping cart, and checkout functionality.", tech: ["WordPress", "WooCommerce", "eCommerce", "PHP"] },
             { title: "OpenSourcePOS Integration", url: "#", role: "POS Integrator", description: "Installed and customized OpenSourcePOS for a restaurant client. The project involved domain setup via GoDaddy, server configuration, and tailoring the POS features to meet specific needs like KOT and receipt formats.", tech: ["OpenSourcePOS", "GoDaddy", "Server Setup", "PHP"] },

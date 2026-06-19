@@ -33,7 +33,7 @@
     <div id="spotlight"></div>
 
     <div id="side-nav-container" class="hidden">
-        <div id="nav-trigger"></div>
+        <div id="nav-trigger"><span class="nav-trigger-text">[ NAV ]</span></div>
         <nav id="side-nav">
             <ul class="flex flex-col items-start justify-center h-full pl-8 space-y-2">
                 <!-- Nav links will be populated by JS -->
@@ -71,7 +71,7 @@
             <section id="about" class="mb-16 reveal">
                 <h2 class="glitch-title text-3xl font-bold text-green-400 mb-6 border-b-2 border-green-400/30 pb-2" data-text="./about.sh">./about.sh</h2>
                 <div class="text-lg leading-relaxed bg-[#161b22]/70 p-6 rounded-md border border-gray-700">
-                    <p data-scramble-text>A proactive and entrepreneurial 4th-year Computer Science student specializing in Cyber Security. Proven experience as a Co-Founder & CTO and System Administrator, leading the development and deployment of full-stack web solutions, IT infrastructure, and custom software. Eager to apply a comprehensive skill set in threat analysis, network hardening, and security automation to a full-time cybersecurity or IT related role.</p>
+                    <p data-scramble-text>I am a technology professional specializing in cybersecurity, network infrastructure, and system deployment. My background spans both physical network architecture and software development, giving me a comprehensive view of how enterprise systems operate from the physical layer up to the application level.<br><br>I focus on building secure, scalable, and resilient IT environments. Rather than treating security as an afterthought, I integrate it directly into the infrastructure and applications I deploy. My goal is to design technology solutions that solve complex business problems efficiently and securely, without creating unnecessary friction for the end user.</p>
                 </div>
             </section>
 
@@ -88,8 +88,24 @@
             <section id="experience" class="mb-16 reveal">
                 <h2 class="glitch-title text-3xl font-bold text-green-400 mb-6 border-b-2 border-green-400/30 pb-2" data-text="./experience.sh">./experience.sh</h2>
                 <div class="space-y-8">
-                     <!-- CtrlWeb Role -->
+                     <!-- Sonet Role -->
                     <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.1s;">
+                        <div class="flex flex-col sm:flex-row items-center gap-8">
+                            <img src="sonet.png" alt="Sonet Logo" class="w-48 h-auto bg-white p-2 rounded-lg">
+                            <div>
+                                <h3 class="text-2xl font-bold text-blue-400">Network & Security Infrastructure Consultant</h3>
+                                <p class="text-gray-400 mb-2">Sonet Integrated Solutions (Titan Company Project) • Jan 2026 – Jun 2026 | Chikkaballapur</p>
+                                <ul class="list-disc list-inside text-gray-400 space-y-2 mt-4">
+                                    <li><strong class="text-gray-200">Enterprise Deployment:</strong> Engineered the complete Layer 1 to Layer 3 deployment of a 152-node enterprise IP CCTV network. Designed the physical fiber-optic backbone and server room architecture to eliminate physical security risks.</li>
+                                    <li><strong class="text-gray-200">Threat Neutralization (Internal DoS):</strong> Acted as the primary incident responder for a catastrophic campus-wide Layer 2 broadcast storm. Diagnosed the spanning tree failure and edge loop, isolated the compromised nodes, and restored 100% network availability with zero data loss.</li>
+                                    <li><strong class="text-gray-200">Topology Re-Architecture:</strong> Audited a vulnerable, legacy daisy-chain network topology and completely re-architected it into a highly resilient Hub-and-Spoke model. Enforced strict subnet isolation and VLAN tagging to prevent lateral propagation of edge-device failures and mitigate future STP vulnerabilities.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                     <!-- CtrlWeb Role -->
+                    <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.2s;">
                         <div class="flex flex-col sm:flex-row items-center gap-8">
                             <img src="ctrlweb.png" alt="CtrlWeb Logo" class="w-48 h-auto">
                             <div>
@@ -105,40 +121,30 @@
                         </div>
                     </div>
                     <!-- E&P Role -->
-                    <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.2s;">
+                    <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.3s;">
                         <div class="flex flex-col sm:flex-row items-center gap-8">
                              <img src="e&p.PNG" alt="E&P Logo" class="w-48 h-auto rounded-lg">
                             <div class="flex-1">
                                 <div class="mb-6">
-                                    <h3 class="text-2xl font-bold text-blue-400">DevOps & IT Lead</h3>
-                                    <p class="text-gray-400 mb-4">E&P International Ventures • Mar 2025 – Sep 2025</p>
+                                    <h3 class="text-2xl font-bold text-blue-400">Infrastructure Engineer</h3>
+                                    <p class="text-gray-400 mb-4">E&P International Ventures • Nov 2024 – Sep 2025</p>
                                     <ul class="list-disc list-inside text-gray-400 space-y-2">
-                                        <li>Engineered and managed CI/CD pipelines that automated the build, testing, and deployment of all web applications.</li>
-                                        <li>Led the end-to-end development and deployment of all new IT initiatives.</li>
-                                        <li>Assumed ownership of the entire IT infrastructure, making strategic decisions on hosting, security, and scalability.</li>
-                                    </ul>
-                                </div>
-                                <div>
-                                    <h3 class="text-xl font-bold text-blue-400">System & Network Administrator</h3>
-                                    <p class="text-gray-400 mb-4">Oct 2024 – Feb 2025</p>
-                                    <ul class="list-disc list-inside text-gray-400 space-y-2">
-                                        <li>Administered Linux servers and a portfolio of over 25 websites on Hostinger shared hosting.</li>
-                                        <li>Served as the primary point of contact for company-wide tech support and managed all IT-related operations.</li>
-                                        <li>Managed containerized applications and workflows using Docker.</li>
+                                        <li>Architected and deployed the comprehensive IT and network infrastructure for a new 13-outlet commercial campus in Shoolagiri and several distributed franchised outlets.</li>
+                                        <li>Evaluated, selected, and integrated the complete technology stack across the campus, including specialized Point-of-Sale (POS) systems.</li>
+                                        <li>Led the end-to-end development and deployment of the corporate website and managed ongoing IT initiatives.</li>
                                     </ul>
                                 </div>
                             </div>
                         </div>
                     </div>
                      <!-- Basik Marketing Role -->
-                    <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.3s;">
+                    <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.4s;">
                         <div>
-                            <h3 class="text-2xl font-bold text-blue-400">System and Network Security Administrator Intern</h3>
+                            <h3 class="text-2xl font-bold text-blue-400">System and Network Security Admin Intern</h3>
                             <p class="text-gray-400 mb-4">Basik Marketing Pvt. Ltd. • Jul 2024 – Oct 2024</p>
                             <ul class="list-disc list-inside text-gray-400 space-y-2">
-                                <li>Assisted in securing and monitoring core network infrastructure, ensuring uptime and integrity against threats.</li>
-                                <li>Contributed to the configuration and security hardening of Linux servers.</li>
-                                <li>Provided Tier 1 technical support for hardware and software issues.</li>
+                                <li>Managed core network infrastructure uptime and performance against threats, actively deploying backup link failover routing during critical power disruptions to eliminate dropped packets on live streams.</li>
+                                <li>Documented corporate IT systems and created comprehensive network diagrams to optimize the internal knowledge base.</li>
                             </ul>
                         </div>
                     </div>
@@ -149,7 +155,7 @@
                 <h2 class="glitch-title text-3xl font-bold text-green-400 mb-6 border-b-2 border-green-400/30 pb-2" data-text="./certificates.sh">./certificates.sh</h2>
                 <div class="relative">
                     <div id="certificates-container" class="certificates-container">
-                        <div id="certificate-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                        <div id="certificate-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-32">
                             <!-- Certificates will be populated by JS -->
                         </div>
                     </div>
@@ -162,24 +168,31 @@
                 </div>
             </section>
 
-            <section id="journey" class="mb-16 reveal">
-                <h2 class="glitch-title text-3xl font-bold text-green-400 mb-6 border-b-2 border-green-400/30 pb-2" data-text="./my_journey.sh">./my_journey.sh</h2>
-                <div class="relative bg-[#161b22]/70 p-6 sm:p-8 rounded-md border border-gray-700">
-                    <div class="absolute left-0 sm:left-8 top-0 h-full w-px bg-gray-700"></div>
-                    <div class="relative pl-8 sm:pl-16 mb-8 reveal reveal-child" style="--delay: 0.1s;">
-                        <div class="absolute left-0 sm:left-8 top-1 w-4 h-4 bg-green-500 rounded-full -translate-x-1/2"></div>
-                        <h3 class="text-lg font-bold text-blue-400">Foundation: Presidency School (Grades 1 - 12)</h3>
-                        <p class="text-gray-400">Completed my schooling in the CBSE stream, choosing Science with Computer Science in 11th and 12th grade to build a strong technical foundation.</p>
+                        <section id="education" class="mb-16 reveal">
+                <h2 class="glitch-title text-3xl font-bold text-green-400 mb-6 border-b-2 border-green-400/30 pb-2" data-text="./education.sh">./education.sh</h2>
+                <div class="space-y-8">
+                     <!-- Garden City University -->
+                    <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.1s;">
+                        <div class="flex flex-col sm:flex-row items-center gap-8">
+                            <img src="logos/gardencity.png" alt="Garden City University Logo" class="w-32 h-auto bg-white p-2 rounded-lg">
+                            <div>
+                                <h3 class="text-2xl font-bold text-blue-400">Garden City University</h3>
+                                <p class="text-gray-400 mb-2">2022 - 2026</p>
+                                <p class="text-lg italic text-green-400 mb-4">"Graduated with a B.Tech in Computer Science (IT-Cyber Security)"</p>
+                                <p class="text-gray-400">Successfully completed my degree with a specialization in Cyber Security, deepening my academic knowledge in the field and graduating with First Class Distinction (CGPA: 9.07 / 10.0).</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="relative pl-8 sm:pl-16 mb-8 reveal reveal-child" style="--delay: 0.2s;">
-                        <div class="absolute left-0 sm:left-8 top-1 w-4 h-4 bg-green-500 rounded-full -translate-x-1/2"></div>
-                        <h3 class="text-lg font-bold text-blue-400">2022-2026: Garden City University</h3>
-                        <p class="text-gray-400">Enrolled in B.Tech Computer Science with a specialization in Cyber Security, deepening my academic knowledge in the field.</p>
-                    </div>
-                    <div class="relative pl-8 sm:pl-16 mb-8 reveal reveal-child" style="--delay: 0.3s;">
-                        <div class="absolute left-0 sm:left-8 top-1 w-4 h-4 bg-green-500 rounded-full -translate-x-1/2"></div>
-                        <h3 class="text-lg font-bold text-blue-400">2024: Founded CtrlWeb</h3>
-                        <p class="text-gray-400">Launched my own SaaS company to provide professional web development, software solutions, and SEO services to a diverse range of clients.</p>
+                    <!-- Presidency School -->
+                    <div class="experience-card bg-[#161b22]/70 p-6 sm:p-8 rounded-md reveal reveal-child" style="--delay: 0.2s;">
+                        <div class="flex flex-col sm:flex-row items-center gap-8">
+                            <img src="logos/presidency.png" alt="Presidency School Logo" class="w-32 h-auto bg-white p-2 rounded-lg">
+                            <div>
+                                <h3 class="text-2xl font-bold text-blue-400">Presidency School (Grades 1 - 12)</h3>
+                                <p class="text-gray-400 mb-2">Foundation</p>
+                                <p class="text-gray-400">Completed my schooling in the CBSE stream, choosing Science with Computer Science in 11th and 12th grade to build a strong technical foundation.</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

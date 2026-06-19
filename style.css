@@ -242,7 +242,7 @@
             transition: max-height 0.7s ease-in-out;
         }
         #certificates-container.expanded {
-            max-height: 2000px; /* Large enough for all certs */
+            max-height: 8000px; /* Needs to be larger to accommodate all cards without clipping */
         }
         .certificates-fade {
             position: absolute;
@@ -251,12 +251,13 @@
             right: 0;
             height: 200px;
             background: linear-gradient(to top, #0d1117, transparent);
-            pointer-events: none;
-            transition: opacity 0.5s ease;
+            pointer-events: auto; /* Block hover on partially hidden bottom cards */
+            transition: opacity 0.5s ease, pointer-events 0.5s ease;
             z-index: 5;
         }
          #certificates-container.expanded + .certificates-fade {
             opacity: 0;
+            pointer-events: none; /* Allow interaction when expanded */
         }
         #toggle-certs-wrapper {
             position: absolute;
@@ -284,19 +285,39 @@
             left: 0;
             top: 50%;
             transform: translateY(-50%);
-            width: 20px;
-            height: 100px;
-            background-color: rgba(88, 166, 255, 0.2);
+            width: 35px;
+            height: 120px;
+            background-color: rgba(88, 166, 255, 0.15);
             border: 1px solid rgba(88, 166, 255, 0.4);
             border-left: none;
-            border-top-right-radius: 10px;
-            border-bottom-right-radius: 10px;
-            cursor: none;
+            border-top-right-radius: 8px;
+            border-bottom-right-radius: 8px;
+            cursor: pointer;
             pointer-events: all;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #58a6ff;
+            font-weight: bold;
+            font-size: 0.85rem;
+            letter-spacing: 2px;
+            box-shadow: 0 0 10px rgba(88, 166, 255, 0.2);
+            animation: nav-pulse 3s infinite alternate;
+        }
+        .nav-trigger-text {
+            transform: rotate(-90deg);
+            white-space: nowrap;
+            text-shadow: 0 0 5px rgba(88, 166, 255, 0.5);
+        }
+        @keyframes nav-pulse {
+            0% { box-shadow: 0 0 5px rgba(88, 166, 255, 0.1); background-color: rgba(88, 166, 255, 0.1); }
+            100% { box-shadow: 0 0 15px rgba(88, 166, 255, 0.5); background-color: rgba(88, 166, 255, 0.25); }
         }
         #side-nav-container:hover #nav-trigger {
             background-color: rgba(88, 166, 255, 0.4);
+            box-shadow: 0 0 20px rgba(88, 166, 255, 0.6);
+            animation: none;
         }
         #side-nav {
             position: absolute;
@@ -370,5 +391,8 @@
             }
             .scanlines {
                 display: none !important;
+            }
+            #nav-trigger {
+                animation: none !important;
             }
         }
