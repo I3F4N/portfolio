@@ -396,3 +396,16 @@
                 animation: none !important;
             }
         }
+        /* Mobile Responsiveness */
+        @media (max-width: 768px) {
+            #side-nav-container {
+                display: none !important; /* Hide side nav on small screens */
+            }
+            .modal-content {
+                padding: 1.5rem; /* Reduce padding on modal */
+            }
+            .close-button {
+                right: 15px;
+                top: 10px;
+            }
+        }
