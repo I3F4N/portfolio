@@ -212,6 +212,19 @@
                 skipBootSequence();
             }
         });
+        let lastTapTime = 0;
+        document.addEventListener('touchstart', (e) => {
+            if (isBooting) {
+                const currentTime = new Date().getTime();
+                const tapLength = currentTime - lastTapTime;
+                if (tapLength < 500 && tapLength > 0) {
+                    skipBootSequence();
+                    // Don't prevent default here as it might break normal scrolling/clicks if we aren't careful, but since it's booting it's fine.
+                }
+                lastTapTime = currentTime;
+            }
+        });
+
 
         function type() {
             if (!isBooting) return;
