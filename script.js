@@ -67,27 +67,14 @@
             document.documentElement.style.setProperty('--y', e.clientY + 'px');
         });
 
-        // --- Custom Cursor ---
-        const cursor = document.getElementById('custom-cursor');
         const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
-
-        if (isTouchDevice) {
-            cursor.style.display = 'none';
-        } else {
-            document.head.insertAdjacentHTML("beforeend", "<style>*:not(input, textarea) { cursor: none; }</style>");
-            document.addEventListener('mousemove', e => {
-                cursor.style.left = e.clientX + 'px';
-                cursor.style.top = e.clientY + 'px';
-            });
-        }
-        
         function updateInteractiveElements() {
             if (isTouchDevice) return;
             // Using event delegation on document body to avoid duplicate listeners and improve performance
             document.body.addEventListener('mouseover', (e) => {
                 const target = e.target.closest('a, button, .project-card, .skill-tag, .close-button, .clickable-tag, #mute-button, .certificate-card, .experience-card, .nav-link, #nav-trigger');
                 if (target && !target._hovered) {
-                    cursor.classList.add('hover');
+                    
                     playHoverSound();
                     target._hovered = true;
                 }
@@ -95,7 +82,7 @@
             document.body.addEventListener('mouseout', (e) => {
                 const target = e.target.closest('a, button, .project-card, .skill-tag, .close-button, .clickable-tag, #mute-button, .certificate-card, .experience-card, .nav-link, #nav-trigger');
                 if (target) {
-                    cursor.classList.remove('hover');
+                    
                     target._hovered = false;
                 }
             });
@@ -116,7 +103,33 @@
         const fontSize = 16;
         let columns = Math.floor(width / fontSize);
         let rainDrops = Array.from({ length: columns }).fill(1);
-        
+
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+            ctx.fillRect(0, 0, width, height);
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+            for (let i = 0; i < rainDrops.length; i++) {
+                const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
+                ctx.fillText(text, i * fontSize, rainDrops[i] * fontSize);
+                if (rainDrops[i] * fontSize > height && Math.random() > 0.975) {
+                    rainDrops[i] = 0;
+                }
+                rainDrops[i]++;
+            }
+        }
+        let lastTime = 0;
+        function animateMatrix(time) {
+            if (isTabActive) {
+                if (time - lastTime > 33) { // ~30fps
+                    drawMatrix();
+                    lastTime = time;
+                }
+            }
+            requestAnimationFrame(animateMatrix);
+        }
+        requestAnimationFrame(animateMatrix);
+
         window.addEventListener('resize', () => {
             width = canvas.width = window.innerWidth;
             height = canvas.height = window.innerHeight;
@@ -124,86 +137,47 @@
             rainDrops = Array.from({ length: columns }).fill(1);
         });
 
-        let lastTime = 0;
-        let mouseX = -1000;
-        let mouseY = -1000;
-
-        document.body.addEventListener('mousemove', e => {
-            mouseX = e.clientX;
-            mouseY = e.clientY;
-        });
-
-        const drawMatrix = (time) => {
-            if (isTabActive && !prefersReducedMotion.matches) {
-                if (time - lastTime > 8) {
-                    ctx.fillStyle = 'rgba(13, 17, 23, 0.05)';
-                    ctx.fillRect(0, 0, width, height);
-                    ctx.fillStyle = '#0f0';
-                    ctx.font = fontSize + 'px monospace';
-                    for (let i = 0; i < rainDrops.length; i++) {
-                        const text = alphabet.charAt(Math.floor(Math.random() * alphabet.length));
-                        
-                        // Mouse interaction: push drops away from mouse
-                        let dropX = i * fontSize;
-                        let dropY = rainDrops[i] * fontSize;
-                        let dist = Math.hypot(mouseX - dropX, mouseY - dropY);
-                        
-                        if (dist < 100) {
-                            ctx.fillStyle = '#fff'; // Glow white near mouse
-                        } else {
-                            ctx.fillStyle = '#0f0';
-                        }
-                        
-                        ctx.fillText(text, dropX, dropY);
-                        if (dropY > height && Math.random() > 0.975) {
-                            rainDrops[i] = 0;
-                        }
-                        rainDrops[i]++;
-                    }
-                    lastTime = time;
-                }
-                requestAnimationFrame(drawMatrix);
-            }
-        };
-        requestAnimationFrame(drawMatrix);
-        
-        // --- Terminal Typing Effect ---
+        // --- Boot Sequence State ---
+        let isBooting = true;
+        let commandIndex = 0;
+        let charIndex = 0;
+        let bootSequenceTimeout = null;
         const outputEl = document.getElementById('output');
         const commandInputEl = document.getElementById('command-input');
-        const mainContentEl = document.getElementById('main-content');
-        const terminalBody = document.getElementById('terminal-body');
+        let terminalBody = document.getElementById('terminal-body');
+
         const commands = [
-            { cmd: 'booting system...', delay: 10, prompt: false },
-            { cmd: 'loading kernel modules...', delay: 20, prompt: false },
-            { cmd: 'initializing security protocols...', delay: 20, prompt: false },
-            { cmd: 'connection established.', delay: 50, prompt: false, color: 'text-green-400' },
-            { cmd: '', delay: 50, prompt: false },
-            { cmd: 'Welcome, Irfan Ahmad.', delay: 10, prompt: true },
-            { cmd: 'Type `help` to see available commands.', delay: 10, prompt: true },
-            { cmd: './start-portfolio.sh', delay: 20, prompt: true, isCommand: true },
+            { cmd: 'Initializing kernel...', isCommand: false, delay: 100 },
+            { cmd: 'Loading network modules... OK', isCommand: false, delay: 80 },
+            { cmd: 'Mounting secure filesystem... OK', isCommand: false, delay: 80 },
+            { cmd: 'Starting firewall daemon... OK', isCommand: false, delay: 80 },
+            { cmd: 'Checking system integrity... PASSED', isCommand: false, delay: 100 },
+            { cmd: 'Establishing encrypted connection... OK', isCommand: false, delay: 150 },
+            { cmd: '', isCommand: false, delay: 200 },
+            { cmd: './start-portfolio.sh', isCommand: true, delay: 300 },
         ];
-        let commandIndex = 0, charIndex = 0;
-        let bootSequenceTimeout;
-        let isBooting = true;
-        
+
         function skipBootSequence() {
             if (!isBooting) return;
-            isBooting = false; const hint = document.getElementById('skip-hint'); if(hint) hint.style.opacity = '0';
+            isBooting = false;
             clearTimeout(bootSequenceTimeout);
-            
+            const hint = document.getElementById('skip-hint');
+            if (hint) hint.style.opacity = '0';
             const bootOverlay = document.getElementById('boot-overlay');
             if (bootOverlay) {
                 bootOverlay.classList.add('opacity-0');
                 setTimeout(() => bootOverlay.style.display = 'none', 1000);
             }
-            
             const mainContent = document.getElementById('layout-wrapper');
             if (mainContent) {
                 mainContent.classList.remove('hidden');
                 setTimeout(() => mainContent.classList.add('opacity-100'), 50);
             }
-            
-            buildTextMinimap(); initializeAllAnimations();
+            buildTextMinimap(); populateMobileNav(); initializeAllAnimations();
+            const mobileNavbar = document.getElementById('mobile-navbar');
+            if (mobileNavbar) {
+                mobileNavbar.classList.remove('-translate-y-full');
+            }
             enableInteractiveTerminal();
         }
 
@@ -289,8 +263,15 @@
                     // Don't call populateNav() because we hand-coded the desktop nav
                     // populateNav();
                     // initializeScrollspy(); // using lenis.on('scroll') now
-                    buildTextMinimap(); initializeAllAnimations();
-                    enableInteractiveTerminal();
+                    buildTextMinimap(); populateMobileNav(); initializeAllAnimations();
+            const mobileNavbar = document.getElementById('mobile-navbar');
+            if (mobileNavbar) {
+                mobileNavbar.classList.remove('-translate-y-full');
+            }
+
+                    
+        enableInteractiveTerminal();
+
                 }, 500);
             } else if (cmdLower === 'help') {
                 outputLine.innerHTML = `Available commands:<br/>
@@ -421,10 +402,16 @@
             });
         }, { threshold: 0.1 });
 
-        function initializeAllAnimations() {
+                function initializeAllAnimations() {
             const revealElements = document.querySelectorAll('.reveal');
             revealElements.forEach(el => { 
                 revealObserver.observe(el);
+                // Failsafe: if observer fails to trigger, force visibility after 1s
+                setTimeout(() => {
+                    if (!el.classList.contains('visible')) {
+                        el.classList.add('visible');
+                    }
+                }, 1000);
             });
         }
         
@@ -546,8 +533,7 @@
         const projectGrid = document.getElementById('project-grid');
         const certificateGrid = document.getElementById('certificate-grid');
         const certificatesContainer = document.getElementById('certificates-container');
-        const toggleCertsBtn = document.getElementById('toggle-certs-btn');
-        const toggleCertsWrapper = document.getElementById('toggle-certs-wrapper');
+
 
         // --- Side Navigation & Scrollspy ---
         function populateNav() {
@@ -596,22 +582,78 @@
             });
         }
             
+        
+
+        
+        
+        // --- Mobile Navbar Logic ---
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileNavList = document.getElementById('mobile-nav-list');
+
+        if (mobileMenuBtn && mobileMenu && mobileNavList) {
+            mobileMenuBtn.addEventListener('click', () => {
+                const isHidden = mobileMenu.classList.contains('hidden');
+                if (isHidden) {
+                    mobileMenu.classList.remove('hidden');
+                    mobileMenu.classList.add('flex');
+                    // Force reflow
+                    void mobileMenu.offsetWidth;
+                    mobileMenu.classList.remove('opacity-0');
+                    mobileMenu.classList.add('opacity-100');
+                    // Populate if empty
+                    if (mobileNavList.children.length === 0) {
+                        const sections = document.querySelectorAll('main > section');
+                        sections.forEach(section => {
+                            const sectionId = section.id;
+                            const sectionTitle = section.querySelector('h2').getAttribute('data-text');
+                            const li = document.createElement('li');
+                            li.innerHTML = `<a href="#${sectionId}" class="block w-full py-4 uppercase hover:text-green-400 transition-colors">${sectionTitle.replace('./', '').replace('.sh', '')}</a>`;
+                            li.addEventListener('click', (e) => {
+                                e.preventDefault();
+                                lenis.scrollTo(`#${sectionId}`, { offset: -80 });
+                                mobileMenu.classList.remove('opacity-100');
+                                mobileMenu.classList.add('opacity-0');
+                                setTimeout(() => {
+                                    mobileMenu.classList.add('hidden');
+                                    mobileMenu.classList.remove('flex');
+                                }, 300);
+                            });
+                            mobileNavList.appendChild(li);
+                        });
+                    }
+                } else {
+                    mobileMenu.classList.remove('opacity-100');
+                    mobileMenu.classList.add('opacity-0');
+                    setTimeout(() => {
+                        mobileMenu.classList.add('hidden');
+                        mobileMenu.classList.remove('flex');
+                    }, 300);
+                }
+            });
+        }
+
         function populateSkills() {
+            skillsGrid.innerHTML = '';
             Object.keys(skillsData).forEach((skill, index) => {
                 const tag = document.createElement('span');
                 tag.className = 'skill-tag bg-gray-700 text-gray-300 py-2 px-4 rounded-full reveal reveal-child clickable-tag';
                 tag.textContent = skill;
-                tag.style.setProperty('--delay', `${0.1 + index * 0.05}s`);
+                tag.style.setProperty('--delay', `${0.1 + (index % 12) * 0.05}s`);
                 tag.addEventListener('click', () => openDetailModal(skillsData[skill]));
                 skillsGrid.appendChild(tag);
+                revealObserver.observe(tag);
             });
+            const toggleBtn = document.getElementById('toggle-skills-btn');
+            if (toggleBtn) toggleBtn.parentElement.style.display = 'none';
         }
-        
+
         function populateInterests() {
+            interestsGrid.innerHTML = '';
             const interestColors = {
                 'Esports': 'bg-red-800/50 text-red-300',
                 'Gym & Powerlifting': 'bg-gray-600/50 text-gray-200',
-                'Sneaker Collecting': 'bg-purple-800/50 text-purple-300',
+                'Sneaker Enthusiast': 'bg-purple-800/50 text-purple-300',
                 'Perfume Collecting': 'bg-pink-800/50 text-pink-300',
                 'PC Building': 'bg-blue-800/50 text-blue-300',
             };
@@ -623,25 +665,33 @@
                 tag.style.setProperty('--delay', `${0.1 + index * 0.1}s`);
                 tag.addEventListener('click', () => openDetailModal(interestsData[interest]));
                 interestsGrid.appendChild(tag);
+                revealObserver.observe(tag);
             });
         }
 
         function populateProjects() {
+            projectGrid.innerHTML = '';
             projects.forEach((project, index) => {
                 const card = document.createElement('div');
                 card.id = 'proj-' + index;
                 card.className = 'project-card bg-[#161b22]/70 p-6 rounded-lg reveal reveal-child';
-                card.style.transitionDelay = `${index * 100}ms`;
+                card.style.transitionDelay = `${(index % 4) * 100}ms`;
                 card.innerHTML = `<h3 class="text-xl font-bold text-gray-100 mb-2">${project.title}</h3><p class="text-gray-400 mb-4">${project.description.substring(0, 100)}...</p><div class="flex flex-wrap gap-2">${project.tech.map(t => `<span class="bg-gray-800 text-xs text-gray-400 py-1 px-2 rounded">${t}</span>`).join('')}</div>`;
                 card.addEventListener('click', () => openDetailModal(project));
                 projectGrid.appendChild(card);
+                revealObserver.observe(card);
             });
+            const toggleBtn = document.getElementById('toggle-projects-btn');
+            if (toggleBtn) toggleBtn.parentElement.style.display = 'none';
         }
-        
+
+        let certsExpanded = false;
         function populateCertificates() {
+            certificateGrid.innerHTML = '';
+            
             const createCard = (cert) => {
                 const card = document.createElement('div');
-                card.className = 'certificate-card h-64 bg-[#161b22]/70 rounded-lg flex flex-col justify-end reveal';
+                card.className = 'certificate-card h-48 md:h-64 bg-[#161b22]/70 rounded-lg flex flex-col justify-end reveal';
                 card.innerHTML = `
                     <div class="card-bg" style="background-image: url('${cert.imageUrl}')"></div>
                     <div class="card-content p-4">
@@ -656,28 +706,70 @@
             certificatesData.forEach((cert) => {
                 const card = createCard(cert);
                 certificateGrid.appendChild(card);
+                revealObserver.observe(card);
             });
             
-            if (certificatesData.length <= 6) {
-                 toggleCertsWrapper.style.display = 'none';
-                 certificatesContainer.classList.add('expanded');
+            let toggleCertsBtn = document.getElementById('toggle-certs-btn');
+            const fadeEl = document.getElementById('cert-fade');
+            
+            const updateLayout = () => {
+                const isPC = window.innerWidth >= 768;
+                if (!isPC) {
+                    certificatesContainer.style.maxHeight = 'none';
+                    if(toggleCertsBtn) toggleCertsBtn.parentElement.style.display = 'none';
+                    if(fadeEl) fadeEl.style.opacity = '0';
+                } else {
+                    if(toggleCertsBtn) toggleCertsBtn.parentElement.style.display = 'flex';
+                    if (!certsExpanded) {
+                        certificatesContainer.style.maxHeight = '650px';
+                        if(fadeEl) fadeEl.style.opacity = '1';
+                        if(toggleCertsBtn) toggleCertsBtn.textContent = 'Show More';
+                    } else {
+                        certificatesContainer.style.maxHeight = '4000px';
+                        if(fadeEl) fadeEl.style.opacity = '0';
+                        if(toggleCertsBtn) toggleCertsBtn.textContent = 'Show Less';
+                    }
+                }
+            };
+            
+            updateLayout();
+            
+            if (toggleCertsBtn && !toggleCertsBtn.dataset.bound) {
+                toggleCertsBtn.dataset.bound = "true";
+                toggleCertsBtn.addEventListener('click', () => {
+                    certsExpanded = !certsExpanded;
+                    if (!certsExpanded) lenis.scrollTo('#certificates', { offset: -100 });
+                    updateLayout();
+                });
             }
+            
         }
 
-        toggleCertsBtn.addEventListener('click', () => {
-            const isExpanded = certificatesContainer.classList.toggle('expanded');
-            if (isExpanded) {
-                toggleCertsBtn.textContent = 'Show Less';
-                const allCards = certificateGrid.children;
-                 for (let i = 0; i < allCards.length; i++) {
-                    revealObserver.observe(allCards[i]);
-                }
+        // Resize listener for certificates layout (added once)
+        let certsResizeHandler = null;
+        window.addEventListener('resize', () => {
+            const isPC = window.innerWidth >= 768;
+            const container = document.getElementById('certificates-container');
+            const fadeEl = document.getElementById('cert-fade');
+            const btn = document.getElementById('toggle-certs-btn');
+            if (!container) return;
+            if (!isPC) {
+                container.style.maxHeight = 'none';
+                if(btn) btn.parentElement.style.display = 'none';
+                if(fadeEl) fadeEl.style.opacity = '0';
             } else {
-                toggleCertsBtn.textContent = 'Show All Certificates';
-                lenis.scrollTo('#certificates', { offset: -100 });
+                if(btn) btn.parentElement.style.display = 'flex';
+                if (!certsExpanded) {
+                    container.style.maxHeight = '650px';
+                    if(fadeEl) fadeEl.style.opacity = '1';
+                    if(btn) btn.textContent = 'Show More';
+                } else {
+                    container.style.maxHeight = '4000px';
+                    if(fadeEl) fadeEl.style.opacity = '0';
+                    if(btn) btn.textContent = 'Show Less';
+                }
             }
         });
-
 
         // --- Modal Logic ---
         const modal = document.getElementById('detail-modal');
@@ -788,7 +880,8 @@
                         const title = titleEl ? titleEl.innerText.replace('./', '').replace('.sh', '').toUpperCase() : 'SECTION';
                         li.className = 'my-2 first:mt-0';
                         li.innerHTML = `<a href="#${el.id}" class="nav-link block text-sm font-bold text-gray-400 hover:text-green-400 tracking-widest px-3 py-2 transition-colors" data-target="${el.id}">${title}</a>`;
-                    } else {
+                    }
+ else {
                         // Project or Experience Card
                         const titleEl = el.querySelector('h3');
                         const title = titleEl ? titleEl.innerText : 'Item';
@@ -862,4 +955,25 @@
                 });
                 
             }, 1000);
+        }
+
+
+
+        function populateMobileNav() {
+            const mobileNavList = document.getElementById('mobile-nav-list');
+            if (!mobileNavList) return;
+            mobileNavList.innerHTML = '';
+            const sections = document.querySelectorAll('main > section');
+            
+            sections.forEach((section, index) => {
+                const sectionId = section.id;
+                const h2 = section.querySelector('h2');
+                if(!h2) return;
+                const sectionTitle = h2.getAttribute('data-text');
+                const li = document.createElement('li');
+                li.innerHTML = `<a href="#${sectionId}" class="mobile-nav-link block hover:text-white transition-colors" data-target="${sectionId}">
+                                    <span class="mr-2 opacity-50">0${index + 1}.</span>${sectionTitle}
+                                </a>`;
+                mobileNavList.appendChild(li);
+            });
         }
