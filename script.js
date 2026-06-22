@@ -135,7 +135,7 @@
 
         const drawMatrix = (time) => {
             if (isTabActive && !prefersReducedMotion.matches) {
-                if (time - lastTime > 33) {
+                if (time - lastTime > 8) {
                     ctx.fillStyle = 'rgba(13, 17, 23, 0.05)';
                     ctx.fillRect(0, 0, width, height);
                     ctx.fillStyle = '#0f0';
@@ -173,14 +173,14 @@
         const mainContentEl = document.getElementById('main-content');
         const terminalBody = document.getElementById('terminal-body');
         const commands = [
-            { cmd: 'booting system...', delay: 50, prompt: false },
-            { cmd: 'loading kernel modules...', delay: 100, prompt: false },
-            { cmd: 'initializing security protocols...', delay: 80, prompt: false },
-            { cmd: 'connection established.', delay: 200, prompt: false, color: 'text-green-400' },
-            { cmd: '', delay: 300, prompt: false },
-            { cmd: 'Welcome, Irfan Ahmad.', delay: 50, prompt: true },
-            { cmd: 'Type `help` to see available commands.', delay: 50, prompt: true },
-            { cmd: './start-portfolio.sh', delay: 100, prompt: true, isCommand: true },
+            { cmd: 'booting system...', delay: 10, prompt: false },
+            { cmd: 'loading kernel modules...', delay: 20, prompt: false },
+            { cmd: 'initializing security protocols...', delay: 20, prompt: false },
+            { cmd: 'connection established.', delay: 50, prompt: false, color: 'text-green-400' },
+            { cmd: '', delay: 50, prompt: false },
+            { cmd: 'Welcome, Irfan Ahmad.', delay: 10, prompt: true },
+            { cmd: 'Type `help` to see available commands.', delay: 10, prompt: true },
+            { cmd: './start-portfolio.sh', delay: 20, prompt: true, isCommand: true },
         ];
         let commandIndex = 0, charIndex = 0;
         let bootSequenceTimeout;
@@ -190,20 +190,21 @@
             if (!isBooting) return;
             isBooting = false; const hint = document.getElementById('skip-hint'); if(hint) hint.style.opacity = '0';
             clearTimeout(bootSequenceTimeout);
-            outputEl.innerHTML = '';
-            commands.forEach(cmd => {
-                if(cmd.isCommand) return;
-                const line = document.createElement('div');
-                if (cmd.prompt) line.classList.add('prompt');
-                if (cmd.color) line.classList.add(cmd.color);
-                line.innerHTML = cmd.cmd;
-                outputEl.appendChild(line);
-            });
-            const newLine = document.createElement('div');
-            newLine.classList.add('prompt');
-            newLine.innerHTML = './start-portfolio.sh';
-            outputEl.appendChild(newLine);
-            executeCommand('./start-portfolio.sh');
+            
+            const bootOverlay = document.getElementById('boot-overlay');
+            if (bootOverlay) {
+                bootOverlay.classList.add('opacity-0');
+                setTimeout(() => bootOverlay.style.display = 'none', 1000);
+            }
+            
+            const mainContent = document.getElementById('layout-wrapper');
+            if (mainContent) {
+                mainContent.classList.remove('hidden');
+                setTimeout(() => mainContent.classList.add('opacity-100'), 50);
+            }
+            
+            buildTextMinimap(); initializeAllAnimations();
+            enableInteractiveTerminal();
         }
 
         // Add event listener to skip boot sequence
@@ -245,7 +246,7 @@
                     line.innerHTML += text.charAt(charIndex);
                 }
                 charIndex++;
-                bootSequenceTimeout = setTimeout(type, 20 + Math.random() * 20);
+                bootSequenceTimeout = setTimeout(type, 5 + Math.random() * 5);
             } else {
                 if (current.isCommand) {
                     const newLine = document.createElement('div');
@@ -273,12 +274,22 @@
                 outputEl.appendChild(outputLine);
                 isBooting = false; const hint = document.getElementById('skip-hint'); if(hint) hint.style.opacity = '0';
                 setTimeout(() => {
-                    document.getElementById('main-content').classList.remove('hidden');
-                    document.getElementById('side-nav-container').classList.remove('hidden');
-                    populateNav();
-                    initializeScrollspy();
-                    initializeAllAnimations();
-                    // updateInteractiveElements(); // Replaced by event delegation
+                    const bootOverlay = document.getElementById('boot-overlay');
+                    if (bootOverlay) {
+                        bootOverlay.classList.add('opacity-0');
+                        setTimeout(() => bootOverlay.style.display = 'none', 1000);
+                    }
+                    
+                    const mainContent = document.getElementById('layout-wrapper');
+                    if (mainContent) {
+                        mainContent.classList.remove('hidden');
+                        setTimeout(() => mainContent.classList.add('opacity-100'), 50);
+                    }
+                    
+                    // Don't call populateNav() because we hand-coded the desktop nav
+                    // populateNav();
+                    // initializeScrollspy(); // using lenis.on('scroll') now
+                    buildTextMinimap(); initializeAllAnimations();
                     enableInteractiveTerminal();
                 }, 500);
             } else if (cmdLower === 'help') {
@@ -295,9 +306,9 @@
             } else if (cmdLower === 'clear') {
                 outputEl.innerHTML = '';
             } else if (cmdLower === 'contact') {
-                outputLine.innerHTML = `Email: <a href="mailto:irfu026@gmail.com" class="text-blue-400 hover:underline">irfu026@gmail.com</a><br/>
-                LinkedIn: <a href="https://linkedin.com/in/irfanahmadblr" target="_blank" class="text-blue-400 hover:underline">irfanahmadblr</a><br/>
-                GitHub: <a href="https://github.com/i3f4n" target="_blank" class="text-blue-400 hover:underline">i3f4n</a>`;
+                outputLine.innerHTML = `Email: <a href="mailto:irfu026@gmail.com" class="text-gray-100 hover:underline">irfu026@gmail.com</a><br/>
+                LinkedIn: <a href="https://linkedin.com/in/irfanahmadblr" target="_blank" class="text-gray-100 hover:underline">irfanahmadblr</a><br/>
+                GitHub: <a href="https://github.com/i3f4n" target="_blank" class="text-gray-100 hover:underline">i3f4n</a>`;
                 outputEl.appendChild(outputLine);
             } else if (cmdLower === 'cat resume.txt') {
                 outputLine.innerHTML = `Irfan Ahmad - Cybersecurity Professional<br/>
@@ -315,26 +326,64 @@
             terminalBody.scrollTop = terminalBody.scrollHeight;
         }
 
-        function enableInteractiveTerminal() {
-            commandInputEl.innerHTML = '<input type="text" id="terminal-input" class="bg-transparent border-none outline-none text-green-400 w-full" autocomplete="off" spellcheck="false" autofocus />';
-            const inputField = document.getElementById('terminal-input');
-            inputField.addEventListener('keydown', function(e) {
-                if (e.key === 'Enter') {
-                    const val = this.value;
-                    
-                    const newLine = document.createElement('div');
-                    newLine.classList.add('prompt');
-                    newLine.innerHTML = val;
-                    outputEl.appendChild(newLine);
-                    
-                    this.value = '';
-                    executeCommand(val);
+        
+        // Extract toggle logic to root so it binds immediately
+        document.addEventListener('DOMContentLoaded', () => {
+            const toggleBtn = document.getElementById('terminal-toggle-btn');
+            const terminalWindow = document.getElementById('floating-terminal-window');
+            const closeBtn = document.getElementById('close-terminal-btn');
+            const header = document.getElementById('floating-terminal-header');
+            const inputField = document.getElementById('mini-input');
+            
+            if (toggleBtn && terminalWindow) {
+                function toggleTerminal() {
+                    terminalWindow.classList.toggle('hidden');
+                    if (!terminalWindow.classList.contains('hidden') && inputField) {
+                        setTimeout(() => inputField.focus(), 100);
+                    }
                 }
-            });
-            // Keep focus when clicking terminal
-            terminalBody.addEventListener('click', () => {
-                inputField.focus();
-            });
+                
+                toggleBtn.addEventListener('click', toggleTerminal);
+                closeBtn.addEventListener('click', toggleTerminal);
+                header.addEventListener('click', (e) => {
+                    if(e.target !== closeBtn) toggleTerminal();
+                });
+            }
+        });
+
+        function enableInteractiveTerminal() {
+            // Bind to the floating terminal execution logic
+            outputEl = document.getElementById('mini-output');
+            terminalBody = document.getElementById('interactive-terminal');
+            
+            const inputField = document.getElementById('mini-input');
+            
+            if(!inputField) return;
+            
+            // Ensure we don't bind multiple times if called again
+            if (!inputField.dataset.bound) {
+                inputField.addEventListener('keydown', function(e) {
+                    if (e.key === 'Enter') {
+                        const val = this.value;
+                        if (val.trim() === '') return;
+                        
+                        const newLine = document.createElement('div');
+                        newLine.classList.add('prompt');
+                        newLine.innerHTML = val;
+                        outputEl.appendChild(newLine);
+                        
+                        this.value = '';
+                        executeCommand(val);
+                    }
+                });
+                
+                // Keep focus when clicking inside terminal body
+                terminalBody.addEventListener('click', () => {
+                    inputField.focus();
+                });
+                
+                inputField.dataset.bound = "true";
+            }
         }
         // --- Text Scramble / Decryption Effect ---
         class TextScramble {
@@ -387,15 +436,22 @@
             if (certCards.length === 0) certCards = document.querySelectorAll('.certificate-card .card-bg');
             
             const innerHeight = window.innerHeight;
+            
+            // Batch reads to avoid layout thrashing
+            const updates = [];
             certCards.forEach(card => {
                 const rect = card.parentElement.getBoundingClientRect();
-                // Only calculate if the card is in or near the viewport
                 if (rect.top < innerHeight + 200 && rect.bottom > -200) {
-                    const speed = 0.2;
-                    const movement = -(rect.top - innerHeight / 2) * speed;
-                    const clampedMovement = Math.max(-50, Math.min(50, movement));
-                    card.style.transform = `translateY(${clampedMovement}px)`;
+                    updates.push({ card, rectTop: rect.top });
                 }
+            });
+            
+            // Batch writes
+            updates.forEach(({ card, rectTop }) => {
+                const speed = 0.2;
+                const movement = -(rectTop - innerHeight / 2) * speed;
+                const clampedMovement = Math.max(-50, Math.min(50, movement));
+                card.style.transform = `translateY(${clampedMovement}px)`;
             });
         }
         
@@ -471,9 +527,10 @@
 
         const projects = [
             { title: "Enterprise Security Infrastructure (Sonet)", url: "#", role: "Network Infrastructure Consultant", description: "Engineered a highly resilient Hub-and-Spoke enterprise network for Titan Company Ltd. Directed end-to-end Layer 1 to Layer 3 deployment, including precision fiber-optic (OFC) splicing, secure server room architecture, and a 152-node IP CCTV network. Implemented strict VLAN segmentation to neutralize internal threats, successfully mitigating a severe Layer 2 broadcast storm.", tech: ["Cisco", "OFC", "IP CCTV", "VLANs", "STP"] },
+            { title: "Custom Enterprise Invoicing Software", url: "#", role: "Implementation & Deployment Lead", description: "Deployed and customized a scalable, self-hosted invoicing and billing solution for multiple enterprise clients. Integrated automated payment workflows, recurring billing, and branded client portals. This enabled businesses to streamline financial operations and maintain complete data sovereignty while eliminating recurring SaaS overhead.", tech: ["Self-Hosted", "PHP", "MySQL", "Docker", "Billing Automation"] },
             { title: "Self-Hosted Enterprise Automation (CtrlWeb)", url: "#", role: "Founder", description: "The Architecture: Deployed n8n automation servers strictly on hardened, self-hosted Linux environments to maintain data sovereignty for SME clients. The Security: Configured secure, webhook-driven workflows for encrypted cross-platform transactions, ensuring zero external exposure of core business system endpoints.", tech: ["n8n", "Linux", "Webhooks", "Docker"] },
             { title: "Secure Multi-Tenant POS Architecture", url: "#", role: "Full-Stack & Security Engineer", description: "The Problem: High-density commercial campuses require POS systems that can handle concurrent transactions offline while maintaining strict data isolation between vendors. The Architecture: Developed a custom POS ecosystem using PHP/JS and Git. The Security: Implemented strict Role-Based Access Control (RBAC), secure session management, and cross-tenant data isolation.", tech: ["PHP", "JavaScript", "MySQL", "RBAC", "Git"] },
-            { title: "Pioneer Ceilings", url: "https://pioneerceilings.com", role: "Website Developer & Host Manager", description: "A WordPress site for a ceilings company, utilizing WooCommerce for its product showcase. I handled the complete site setup, theme and plugin configuration, and provide ongoing hosting management.", tech: ["WordPress", "WooCommerce", "Hostinger", "PHP"] },
+            { title: "Pioneer Ceilings", url: "#", role: "Website Developer & Host Manager", description: "A WordPress site for a ceilings company, utilizing WooCommerce for its product showcase. I handled the complete site setup, theme and plugin configuration, and provide ongoing hosting management.", tech: ["WordPress", "WooCommerce", "Hostinger", "PHP"] },
             { title: "Elephant & Peacock POS", url: "https://eandppos.in", role: "POS Software Developer", description: "A complete, custom-built Point-of-Sale software for a retail client. The system supports multiple outlets, receipt and Kitchen Order Ticket (KOT) printing, and the entire codebase is version-controlled with Git.", tech: ["Custom POS", "PHP", "JavaScript", "Git", "MySQL"] },
             { title: "eandp.in eCommerce", url: "https://eandp.in", role: "eCommerce Developer", description: "Developed and deployed a clothing retail eCommerce website. Managed domain purchasing and hosting, utilizing Wix as the site builder for certain workflows while managing multiple related sites on Hostinger.", tech: ["Wix", "eCommerce", "Hostinger", "Domain Mgmt"] },
             { title: "Bagisto Sales Lead Checkout", url: "#", role: "eCommerce Developer", description: "Customized a Bagisto (Laravel-based) eCommerce platform to bypass the payment gateway. Instead, checkout details are captured and routed directly to the sales team via email and WhatsApp/SMS using a custom 'SalesLeadCheckout' package and Twilio integration.", tech: ["Bagisto", "Laravel", "PHP", "Twilio API"] },
@@ -572,9 +629,10 @@
         function populateProjects() {
             projects.forEach((project, index) => {
                 const card = document.createElement('div');
+                card.id = 'proj-' + index;
                 card.className = 'project-card bg-[#161b22]/70 p-6 rounded-lg reveal reveal-child';
                 card.style.transitionDelay = `${index * 100}ms`;
-                card.innerHTML = `<h3 class="text-xl font-bold text-blue-400 mb-2">${project.title}</h3><p class="text-gray-400 mb-4">${project.description.substring(0, 100)}...</p><div class="flex flex-wrap gap-2">${project.tech.map(t => `<span class="bg-gray-800 text-xs text-gray-400 py-1 px-2 rounded">${t}</span>`).join('')}</div>`;
+                card.innerHTML = `<h3 class="text-xl font-bold text-gray-100 mb-2">${project.title}</h3><p class="text-gray-400 mb-4">${project.description.substring(0, 100)}...</p><div class="flex flex-wrap gap-2">${project.tech.map(t => `<span class="bg-gray-800 text-xs text-gray-400 py-1 px-2 rounded">${t}</span>`).join('')}</div>`;
                 card.addEventListener('click', () => openDetailModal(project));
                 projectGrid.appendChild(card);
             });
@@ -587,7 +645,7 @@
                 card.innerHTML = `
                     <div class="card-bg" style="background-image: url('${cert.imageUrl}')"></div>
                     <div class="card-content p-4">
-                        <h3 class="text-lg font-bold text-blue-400">${cert.title}</h3>
+                        <h3 class="text-lg font-bold text-gray-100">${cert.title}</h3>
                         <p class="text-sm text-gray-400">${cert.issuer}</p>
                     </div>
                 `;
@@ -707,3 +765,101 @@
             populateCertificates();
             updateInteractiveElements();
         });
+
+
+                        // --- Text Minimap & Frame Tracker ---
+        function buildTextMinimap() {
+            const navList = document.getElementById('nav-list');
+            const navFrame = document.getElementById('nav-frame');
+            if (!navList || !navFrame) return;
+            
+            // Allow DOM to settle
+            setTimeout(() => {
+                navList.innerHTML = '';
+                
+                const elements = document.querySelectorAll('#main-content > section');
+                
+                elements.forEach((el, index) => {
+                    const li = document.createElement('li');
+                    
+                    if (el.tagName.toLowerCase() === 'section') {
+                        // Ensure section has an ID
+                        const titleEl = el.querySelector('h2');
+                        const title = titleEl ? titleEl.innerText.replace('./', '').replace('.sh', '').toUpperCase() : 'SECTION';
+                        li.className = 'my-2 first:mt-0';
+                        li.innerHTML = `<a href="#${el.id}" class="nav-link block text-sm font-bold text-gray-400 hover:text-green-400 tracking-widest px-3 py-2 transition-colors" data-target="${el.id}">${title}</a>`;
+                    } else {
+                        // Project or Experience Card
+                        const titleEl = el.querySelector('h3');
+                        const title = titleEl ? titleEl.innerText : 'Item';
+                        
+                        // Ensure element has an ID
+                        if (!el.id) el.id = 'minimap-item-' + index;
+                        
+                        li.className = 'my-0';
+                        // Shorten title if too long
+                        const shortTitle = title.length > 25 ? title.substring(0, 22) + '...' : title;
+                        li.innerHTML = `<a href="#${el.id}" class="nav-link block text-[10px] text-gray-600 hover:text-gray-300 px-3 py-1 transition-colors whitespace-nowrap overflow-hidden text-ellipsis" data-target="${el.id}">${shortTitle}</a>`;
+                    }
+                    
+                    navList.appendChild(li);
+                });
+                
+                // Bind Clicks
+                document.querySelectorAll('#nav-list .nav-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('data-target');
+                        lenis.scrollTo('#' + targetId, { offset: -50 });
+                    });
+                });
+                
+                // Scroll Tracker for the Frame
+                lenis.on('scroll', () => {
+                    let activeId = '';
+                    let activeLinkEl = null;
+                    
+                    // 1. Check if we are at the absolute bottom of the page
+                    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
+                        if (elements.length > 0) activeId = elements[elements.length - 1].id;
+                    } else {
+                        // 2. Otherwise find the lowest element that is in the upper half of the screen
+                        for (let i = elements.length - 1; i >= 0; i--) {
+                            const el = elements[i];
+                            const rect = el.getBoundingClientRect();
+                            if (rect.top <= window.innerHeight * 0.5) {
+                                activeId = el.id;
+                                break;
+                            }
+                        }
+                    }
+                    
+                    // Fallback to first element if at very top
+                    if (!activeId && elements.length > 0 && window.scrollY < 100) {
+                        activeId = elements[0].id;
+                    }
+                    
+                    if (activeId) {
+                        activeLinkEl = document.querySelector(`#nav-list .nav-link[data-target="${activeId}"]`);
+                        
+                        if (activeLinkEl) {
+                            navFrame.style.opacity = '1';
+                            
+                            // Get exactly where the active <li> is in the scrollable nav list
+                            const li = activeLinkEl.parentElement;
+                            const top = li.offsetTop;
+                            const height = li.offsetHeight;
+                            
+                            // Size the frame perfectly around the li
+                            navFrame.style.top = top + 'px';
+                            navFrame.style.height = height + 'px';
+                            
+
+                        }
+                    } else {
+                        navFrame.style.opacity = '0';
+                    }
+                });
+                
+            }, 1000);
+        }
