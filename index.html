@@ -45,6 +45,16 @@
                     <span class="cursor animate-pulse">_</span>
                 </div>
             </div>
+            
+            <!-- Boot progress indicator -->
+            <div id="boot-progress-container" class="mt-4 font-mono text-sm text-green-400/80 flex items-center gap-4 transition-opacity duration-300">
+                <span>SYS_LOAD:</span>
+                <div class="flex-1 h-1.5 bg-green-900/40 overflow-hidden rounded-full">
+                    <div id="boot-progress-bar" class="h-full bg-green-400 shadow-[0_0_10px_rgba(34,197,94,0.8)] transition-all duration-[50ms]" style="width: 0%"></div>
+                </div>
+                <span id="boot-progress-text" class="w-12 text-right">0%</span>
+            </div>
+            
             <div id="skip-hint" class="text-center text-gray-500 text-xs mt-6 transition-opacity duration-500">
                 Press [Enter], [Esc] or Double-Tap to skip boot sequence
             </div>
@@ -60,15 +70,16 @@
     <!-- The Split-Screen Layout Wrapper -->
     <div id="layout-wrapper" class="hidden opacity-0 transition-opacity duration-1000 w-full max-w-[1600px] mx-auto px-4 md:px-12 pb-12 md:pb-16 lg:pb-32 pt-12 lg:pt-32">
     <!-- Mobile Navbar -->
-    <div class="fixed top-0 left-0 w-full bg-[#0d1117]/90 backdrop-blur-md border-b border-green-500/20 z-50 lg:hidden flex justify-between items-center px-6 py-4" id="mobile-navbar">
-        <div class="flex items-center gap-2"><span class="text-green-400 font-mono font-bold tracking-widest text-sm">~/irfan</span><span id="mobile-section-indicator" class="text-gray-500 font-mono text-xs hidden lg:hidden">/</span></div>
+    <div class="fixed top-0 left-0 w-full bg-[#0d1117]/90 backdrop-blur-md border-b border-green-500/20 z-[70] lg:hidden flex justify-between items-center px-6 py-4" id="mobile-navbar">
+        <div class="flex items-center gap-2"><span class="text-green-400 font-mono font-bold tracking-widest text-sm">~/irfan</span><span id="mobile-section-indicator" class="text-gray-500 font-mono text-xs hidden lg:hidden">/</span><span class="animate-cursor-blink text-green-400 font-mono font-bold ml-1 hidden lg:hidden" id="mobile-cursor">_</span></div>
+        <div id="mobile-progress-bar" class="absolute bottom-0 left-0 h-[2px] bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] w-0 transition-all duration-150 ease-out z-[71]"></div>
         <button id="mobile-menu-btn" class="text-green-400 focus:outline-none">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
     </div>
     
     <!-- Mobile Fullscreen Menu -->
-    <div id="mobile-menu" class="fixed inset-0 bg-[#0d1117]/95 backdrop-blur-lg z-[60] hidden items-center justify-center pt-16 opacity-0 transition-opacity duration-300">
+    <div id="mobile-menu" class="fixed inset-0 bg-[#0d1117]/95 backdrop-blur-lg z-[60] hidden items-center justify-center pt-24 opacity-0 transition-opacity duration-300">
         <ul id="mobile-nav-list" class="space-y-8 text-center font-mono text-xl tracking-widest text-gray-400">
             <!-- Populated by JS -->
         </ul>
@@ -82,7 +93,15 @@
             <div class="lg:col-span-3 hidden lg:block">
                 <div class="sticky top-32 flex flex-col h-auto">
                     <div class="overflow-y-auto no-scrollbar pr-4 relative flex flex-col font-mono">
-                        <div id="nav-frame" class="absolute left-0 w-full border border-green-500/40 bg-green-500/5 rounded-[2px] transition-all duration-300 pointer-events-none" style="top: 0; height: 0; opacity: 0;"></div>
+                        <div id="nav-frame" class="absolute left-0 w-full transition-all duration-300 pointer-events-none z-0" style="top: 0; height: 0; opacity: 0;">
+                            <!-- Cyberpunk HUD corner brackets -->
+                            <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-green-400"></div>
+                            <div class="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-green-400"></div>
+                            <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-green-400"></div>
+                            <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-green-400"></div>
+                            <!-- Scanline/Targeting background -->
+                            <div class="absolute inset-0 bg-green-500/10 border-l border-r border-green-500/30 shadow-[inset_0_0_15px_rgba(34,197,94,0.15)]"></div>
+                        </div>
                         <ul id="nav-list" class="space-y-1 relative z-10 w-full pb-12 list-none">
                             <!-- Populated by JS minimap logic -->
                         </ul>

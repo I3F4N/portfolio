@@ -161,14 +161,19 @@
         let terminalBody = document.getElementById('terminal-body');
 
         const commands = [
-            { cmd: 'Initializing kernel...', isCommand: false, prompt: true, delay: 100 },
-            { cmd: 'Loading network modules... OK', isCommand: false, prompt: true, delay: 80 },
-            { cmd: 'Mounting secure filesystem... OK', isCommand: false, prompt: true, delay: 80 },
-            { cmd: 'Starting firewall daemon... OK', isCommand: false, prompt: true, delay: 80 },
-            { cmd: 'Checking system integrity... PASSED', isCommand: false, prompt: true, delay: 100 },
-            { cmd: 'Establishing encrypted connection... OK', isCommand: false, prompt: true, delay: 150 },
-            { cmd: '', isCommand: false, delay: 200 },
-            { cmd: './start-portfolio.sh', isCommand: true, delay: 300 },
+            { cmd: 'Booting Antigravity OS v9.4.2...', isCommand: false, delay: 30 },
+            { cmd: '[ OK ] Reached target Basic System.', isCommand: false, color: 'text-green-400', delay: 20 },
+            { cmd: '[ OK ] Started Hardware RNG Entropy Gatherer Daemon.', isCommand: false, color: 'text-green-400', delay: 20 },
+            { cmd: 'Mounting /dev/nvme0n1p2 on /root... ', isCommand: false, delay: 50 },
+            { cmd: 'SUCCESS', isCommand: false, color: 'text-green-400', append: true, delay: 20 },
+            { cmd: 'Starting Secure Shell server...', isCommand: false, delay: 30 },
+            { cmd: '[ OK ] Listening on 0.0.0.0:22', isCommand: false, color: 'text-green-400', delay: 20 },
+            { cmd: 'Decrypting local user vault... ', isCommand: false, delay: 80 },
+            { cmd: 'ACCESS GRANTED', isCommand: false, color: 'text-green-400', append: true, delay: 40 },
+            { cmd: 'Loading holographic interface modules... done.', isCommand: false, delay: 30 },
+            { cmd: 'Welcome to the network.', isCommand: false, color: 'text-blue-400', delay: 100 },
+            { cmd: '', isCommand: false, delay: 100 },
+            { cmd: './start-portfolio.sh', isCommand: true, delay: 150 },
         ];
 
         function skipBootSequence() {
@@ -177,6 +182,8 @@
             clearTimeout(bootSequenceTimeout);
             const hint = document.getElementById('skip-hint');
             if (hint) hint.style.opacity = '0';
+            const progressContainer = document.getElementById('boot-progress-container');
+            if (progressContainer) progressContainer.style.opacity = '0';
             const bootOverlay = document.getElementById('boot-overlay');
             if (bootOverlay) {
                 bootOverlay.classList.add('opacity-0');
@@ -225,7 +232,7 @@
                 if (current.isCommand) commandInputEl.innerHTML += text.charAt(charIndex);
                 else {
                     let line = outputEl.lastElementChild;
-                    if (!line || current.prompt) {
+                    if (!line || (charIndex === 0 && !current.append)) {
                         line = document.createElement('div');
                         if (current.prompt) line.classList.add('prompt');
                         if (current.color) line.classList.add(current.color);
@@ -234,7 +241,23 @@
                     line.innerHTML += text.charAt(charIndex);
                 }
                 charIndex++;
-                bootSequenceTimeout = setTimeout(type, 5 + Math.random() * 5);
+                
+                // Update boot progress bar
+                const progressContainer = document.getElementById('boot-progress-container');
+                const progressBar = document.getElementById('boot-progress-bar');
+                const progressText = document.getElementById('boot-progress-text');
+                if (progressContainer && progressBar && progressText) {
+                    const totalChars = commands.reduce((acc, cmd) => acc + cmd.cmd.length, 0);
+                    let charsTypedSoFar = 0;
+                    for (let i = 0; i < commandIndex; i++) charsTypedSoFar += commands[i].cmd.length;
+                    charsTypedSoFar += charIndex;
+                    
+                    const percent = Math.min(100, Math.floor((charsTypedSoFar / totalChars) * 100));
+                    progressBar.style.width = percent + '%';
+                    progressText.textContent = percent + '%';
+                }
+                
+                bootSequenceTimeout = setTimeout(type, 2 + Math.random() * 3);
             } else {
                 if (current.isCommand) {
                     const newLine = document.createElement('div');
@@ -261,6 +284,8 @@
                 outputLine.innerHTML = 'Initializing portfolio interface... Success.';
                 outputEl.appendChild(outputLine);
                 isBooting = false; const hint = document.getElementById('skip-hint'); if(hint) hint.style.opacity = '0';
+                const progressContainer = document.getElementById('boot-progress-container');
+                if (progressContainer) progressContainer.style.opacity = '0';
                 setTimeout(() => {
                     const bootOverlay = document.getElementById('boot-overlay');
                     if (bootOverlay) {
@@ -610,6 +635,8 @@
                     void mobileMenu.offsetWidth;
                     mobileMenu.classList.remove('opacity-0');
                     mobileMenu.classList.add('opacity-100');
+                    // Add staggered cascade class
+                    setTimeout(() => mobileNavList.classList.add('mobile-menu-active'), 50);
                     // Animate hamburger to X
                     mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
                     // Populate if empty
@@ -623,6 +650,7 @@
                             li.addEventListener('click', (e) => {
                                 e.preventDefault();
                                 lenis.scrollTo(`#${sectionId}`, { offset: -80 });
+                                mobileNavList.classList.remove('mobile-menu-active');
                                 mobileMenu.classList.remove('opacity-100');
                                 mobileMenu.classList.add('opacity-0');
                                 mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
@@ -635,6 +663,7 @@
                         });
                     }
                 } else {
+                    mobileNavList.classList.remove('mobile-menu-active');
                     mobileMenu.classList.remove('opacity-100');
                     mobileMenu.classList.add('opacity-0');
                     // Animate X back to hamburger
@@ -874,6 +903,8 @@
 
 
                         // --- Text Minimap & Frame Tracker ---
+        let isNavigating = false;
+        let navTimeout = null;
         function buildTextMinimap() {
             const navList = document.getElementById('nav-list');
             const navFrame = document.getElementById('nav-frame');
@@ -893,7 +924,7 @@
                         const titleEl = el.querySelector('h2');
                         const title = titleEl ? titleEl.innerText.replace('./', '').replace('.sh', '').toUpperCase() : 'SECTION';
                         li.className = 'my-2 first:mt-0';
-                        li.innerHTML = `<a href="#${el.id}" class="nav-link block text-sm font-bold text-gray-400 hover:text-green-400 tracking-widest px-3 py-2 transition-colors" data-target="${el.id}">${title}</a>`;
+                        li.innerHTML = `<a href="#${el.id}" class="nav-link block text-base font-bold text-gray-400 hover:text-green-400 tracking-widest px-3 py-2 transition-all duration-300" data-target="${el.id}">${title}</a>`;
                     }
  else {
                         // Project or Experience Card
@@ -906,7 +937,7 @@
                         li.className = 'my-0';
                         // Shorten title if too long
                         const shortTitle = title.length > 25 ? title.substring(0, 22) + '...' : title;
-                        li.innerHTML = `<a href="#${el.id}" class="nav-link block text-[10px] text-gray-600 hover:text-gray-300 px-3 py-1 transition-colors whitespace-nowrap overflow-hidden text-ellipsis" data-target="${el.id}">${shortTitle}</a>`;
+                        li.innerHTML = `<a href="#${el.id}" class="nav-link block text-xs text-gray-500 hover:text-gray-300 px-3 py-1 transition-all duration-300 whitespace-nowrap overflow-hidden text-ellipsis" data-target="${el.id}">${shortTitle}</a>`;
                     }
                     
                     navList.appendChild(li);
@@ -917,15 +948,40 @@
                     link.addEventListener('click', (e) => {
                         e.preventDefault();
                         const targetId = link.getAttribute('data-target');
+                        
+                        // Set navigation flag so scroll event doesn't hijack the HUD
+                        isNavigating = true;
+                        clearTimeout(navTimeout);
+                        navTimeout = setTimeout(() => { isNavigating = false; }, 1200); // 1.2s is lenis default duration
+                        
+                        // Immediately snap the HUD to the target item
+                        const li = link.parentElement;
+                        navFrame.style.top = li.offsetTop + 'px';
+                        navFrame.style.height = li.offsetHeight + 'px';
+                        navFrame.style.opacity = '1';
+                        
+                        document.querySelectorAll('#nav-list .nav-link').forEach(l => {
+                            l.classList.remove('text-green-400', 'translate-x-2', 'drop-shadow-[0_0_8px_rgba(34,197,94,0.8)]');
+                        });
+                        link.classList.add('text-green-400', 'translate-x-2', 'drop-shadow-[0_0_8px_rgba(34,197,94,0.8)]');
+                        
                         lenis.scrollTo('#' + targetId, { offset: -50 });
                     });
                 });
                 
                 // Scroll Tracker for the Frame
                 lenis.on('scroll', () => {
+                    if (isNavigating) return; // Don't update HUD during automated scroll jumps
                     let activeId = '';
                     let activeLinkEl = null;
                     
+                    // Update mobile scroll progress bar
+                    const progressBar = document.getElementById('mobile-progress-bar');
+                    if (progressBar && window.innerWidth < 1024) {
+                        const scrollPercent = (window.scrollY / (document.body.offsetHeight - window.innerHeight)) * 100;
+                        progressBar.style.width = scrollPercent + '%';
+                    }
+
                     // 1. Check if we are at the absolute bottom of the page
                     if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 50) {
                         if (elements.length > 0) activeId = elements[elements.length - 1].id;
@@ -960,6 +1016,12 @@
                             // Size the frame perfectly around the li
                             navFrame.style.top = top + 'px';
                             navFrame.style.height = height + 'px';
+                            
+                            // Visual pop for active item
+                            document.querySelectorAll('#nav-list .nav-link').forEach(link => {
+                                link.classList.remove('text-green-400', 'translate-x-2', 'drop-shadow-[0_0_8px_rgba(34,197,94,0.8)]');
+                            });
+                            activeLinkEl.classList.add('text-green-400', 'translate-x-2', 'drop-shadow-[0_0_8px_rgba(34,197,94,0.8)]');
 
                             // Update mobile section indicator
                             const indicator = document.getElementById('mobile-section-indicator');
@@ -967,6 +1029,8 @@
                                 const sectionName = activeLinkEl.textContent.trim();
                                 indicator.textContent = '/ ' + sectionName.toLowerCase();
                                 indicator.classList.remove('hidden');
+                                const cursor = document.getElementById('mobile-cursor');
+                                if (cursor) cursor.classList.remove('hidden');
                             }
                         }
                     } else {
@@ -991,9 +1055,37 @@
                 if(!h2) return;
                 const sectionTitle = h2.getAttribute('data-text');
                 const li = document.createElement('li');
+                li.className = 'mobile-nav-item';
+                li.style.transitionDelay = `${index * 0.08}s`;
                 li.innerHTML = `<a href="#${sectionId}" class="mobile-nav-link block hover:text-white transition-colors" data-target="${sectionId}">
                                     <span class="mr-2 opacity-50">0${index + 1}.</span>${sectionTitle}
                                 </a>`;
+                
+                // Add click listener so links actually close the menu on mobile!
+                li.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    lenis.scrollTo(`#${sectionId}`, { offset: -80 });
+                    
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+                    const mobileNavList = document.getElementById('mobile-nav-list');
+                    
+                    if (mobileNavList) mobileNavList.classList.remove('mobile-menu-active');
+                    if (mobileMenu) {
+                        mobileMenu.classList.remove('opacity-100');
+                        mobileMenu.classList.add('opacity-0');
+                    }
+                    if (mobileMenuBtn) {
+                        mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+                    }
+                    setTimeout(() => {
+                        if (mobileMenu) {
+                            mobileMenu.classList.add('hidden');
+                            mobileMenu.classList.remove('flex');
+                        }
+                    }, 300);
+                });
+                
                 mobileNavList.appendChild(li);
             });
         }
