@@ -1095,7 +1095,7 @@
                 li.className = 'mobile-nav-item';
                 li.style.transitionDelay = `${index * 0.08}s`;
                 li.innerHTML = `<a href="#${sectionId}" class="mobile-nav-link block w-full py-2 text-[clamp(14px,3vh,24px)] font-bold tracking-[0.1em] text-center uppercase hover:text-green-400 transition-colors" data-target="${sectionId}">
-                                    <span class="mr-3 opacity-30 text-xl font-mono block mb-1">0${index + 1}.</span>${sectionTitle.replace('./', '').replace('.sh', '')}
+                                    ${sectionTitle.replace('./', '').replace('.sh', '')}
                                 </a>`;
                 
                 // Add click listener so links actually close the menu on mobile!
