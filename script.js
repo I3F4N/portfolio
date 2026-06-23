@@ -524,25 +524,22 @@
             'Operating Systems': { title: 'Operating Systems', description: 'Experienced in the installation and configuration of several different operating systems across different platforms, and familiar with the file systems of both windows and linux.'},
             'Security & Pentesting': { title: 'Security & Pentesting', description: 'Proficient in threat analysis and mitigation with tools like Microsoft Certified Cybersecurity Analyst suite and Wazuh IDS. Hands-on experience from PortSwigger Web Security Core Labs (SQLi, XSS, CSRF), DDoS Mitigation, and implementing Role-Based Access Control (RBAC) and IdAM.'},
             'Networking & Infrastructure': { title: 'Networking & Infrastructure', description: 'Cisco CCNA certified with strong skills in Linux System Administration, TCP/IP, VLAN, DHCP, DNS, and VPN Setup & Troubleshooting. Experienced in server setup and security hardening.'},
+            'Enterprise CCTV Networks': { title: 'Enterprise CCTV Networks', description: 'Expertise in the complete deployment of large-scale, enterprise-grade IP CCTV networks, including physical fiber-optic backbones and server room architecture.' },
+            'Network Architecture': { title: 'Network Architecture', description: 'Skilled in auditing vulnerable network topologies and re-architecting them into highly resilient, scalable models with strict subnet isolation and VLAN tagging.' },
+            'Incident Response': { title: 'Incident Response', description: 'Capable of rapid response and threat neutralization for catastrophic network failures, including Layer 2 broadcast storms, STP failures, and edge loops.' },
+            'System Configuration': { title: 'System Configuration', description: 'Experience in configuring complex IT systems, including servers, networking equipment, and end-user devices for seamless enterprise operations.' },
             'DevOps & Automation': { title: 'DevOps & Automation', description: 'Skilled in using Docker for containerization, building and managing CI/CD Pipelines, and creating complex workflows with n8n. Proficient in Bash Scripting, and Sendmail/Mail Server Configuration.'},
-            'Programming & Frameworks': { title: 'Programming & Frameworks', description: 'Fluent in Python, JavaScript, PHP, and C++. Experience with backend frameworks including CodeIgniter and Laravel, and front-end libraries like React.'},
-            'Web & CMS': { title: 'Web & CMS Development', description: 'Expertise in WordPress, including Advanced Custom Fields (ACF) and WooCommerce for e-commerce. Proficient with Wix Studio and capable of custom plugin development to extend functionality.'},
+            'Programming & Frameworks': { title: 'Programming & Frameworks', description: 'Fluent in Python, JavaScript, C++, and more, enabling the creation of complete, end-to-end applications and solutions.'},
             'Server Management': { title: 'Server Management', description: 'Expertise in setting up, configuring, and maintaining web servers (like Apache/Nginx), including VPS management, domain configuration, DNS, and ensuring high availability and performance.' },
-            'Full-Stack Dev': { title: 'Full-Stack Development', description: 'Proficient in both front-end (HTML, CSS, JavaScript) and back-end (PHP, Laravel, databases) development, enabling the creation of complete, end-to-end web applications.' },
+            'Full-Stack Dev': { title: 'Full-Stack Development', description: 'Proficient in both front-end (HTML, CSS, JavaScript) and back-end development, enabling the creation of complete, end-to-end web applications.' },
             'Git/VCS': { title: 'Git / Version Control', description: 'Adept at using Git for version control, including branching, merging, and collaborating with teams on complex codebases. Essential for maintaining code integrity and managing project history.' },
-            'PHP/JS': { title: 'PHP & JavaScript', description: 'Strong command of PHP for server-side logic and JavaScript for creating dynamic and interactive front-end experiences. The core languages for much of my web development work.' },
-            'WordPress': { title: 'WordPress Development', description: 'Skilled in developing and customizing WordPress sites, including theme and plugin development, site optimization, and management for clients.' },
-            'WooCommerce': { title: 'WooCommerce', description: 'Experienced in building and managing e-commerce stores using WooCommerce, including product setup, payment gateway integration, and custom checkout flows.' },
             'eCommerce': { title: 'eCommerce Solutions', description: 'Broad experience with various e-commerce platforms like Bagisto and Wix, focusing on creating seamless online shopping experiences and custom sales funnels.' },
             'POS Systems': { title: 'Point-of-Sale (POS) Systems', description: 'Experience in developing and customizing POS software for retail and restaurants, including features like multi-outlet support, inventory management, and receipt/KOT printing.' },
             'Automation (n8n)': { title: 'Automation (n8n)', description: 'Using tools like n8n to create automated workflows that connect different apps and services, improving efficiency and reducing manual work for businesses.' },
             'Docker': { title: 'Docker', description: 'Utilizing Docker to containerize applications, ensuring consistent development and deployment environments, and simplifying the process of scaling applications.' },
-            'Laravel': { title: 'Laravel', description: 'Proficient in the Laravel PHP framework for building robust, scalable, and maintainable web applications with an elegant and expressive syntax.' },
-            'Android Dev': { title: 'Android Development', description: 'Basic experience in native Android app development using Java/Kotlin, with a focus on creating functional and user-friendly mobile applications.' },
             'Technical Support': { title: 'Technical Support', description: 'Proficient in diagnosing and resolving a wide range of hardware and software issues for users. Skilled in providing clear, friendly, and effective technical assistance to ensure smooth and reliable system operation.' },
             'PC Building': { title: 'PC Building', description: 'Experienced in custom PC building, from component selection and compatibility checking to assembly and performance tuning. Passionate about creating high-performance machines tailored for specific needs like gaming or development.' },
-            'Polyglot / Languages': { title: 'Polyglot / Languages', description: 'Fluent in over 8 languages. Completely fluent in English, Hindi, Malayalam, Kannada, Urdu, Tamil, and Jeseri. Able to speak and understand Japanese, possess basic conversational Arabic, and currently holding a B2 level in French.' },
-        };
+            'Polyglot / Languages': { title: 'Polyglot / Languages', description: 'Fluent in over 8 languages. Completely fluent in English, Hindi, Malayalam, Kannada, Urdu, Tamil, and Jeseri. Able to speak and understand Japanese, possess basic conversational Arabic, and currently holding a B2 level in French.' }};
 
         const interestsData = {
             'Esports': { title: 'Esports', description: 'A passionate and skilled competitive gamer, excelling in high-stakes games like Valorant, Rocket League, and Apex Legends that require sharp reflexes, strategic thinking, and effective teamwork.' },
@@ -683,7 +680,7 @@
             Object.keys(skillsData).forEach((skill, index) => {
                 const tag = document.createElement('span');
                 const colorClass = skillColors[index % skillColors.length];
-                tag.className = `skill-tag bg-[#161b22]/50 border ${colorClass} py-2 px-4 rounded-full reveal reveal-child clickable-tag transition-all duration-300 flex items-center gap-2`;
+                tag.className = `skill-tag bg-[#161b22]/50 border ${colorClass} py-2 px-4 rounded-full reveal reveal-child clickable-tag transition-all duration-300 flex items-center gap-2 cursor-pointer`;
                 tag.innerHTML = `<span class="opacity-50 text-xs font-mono">[]</span> ${skill}`;
                 tag.style.setProperty('--delay', `${0.1 + (index % 12) * 0.05}s`);
                 tag.addEventListener('click', () => openDetailModal(skillsData[skill]));
@@ -710,7 +707,7 @@
             Object.keys(interestsData).forEach((interest, index) => {
                 const tag = document.createElement('span');
                 const colorClass = interestColors[interest] || 'border-gray-500/40 text-gray-300 bg-gray-800/40 hover:bg-gray-500/20';
-                tag.className = `skill-tag border ${colorClass} py-2 px-4 rounded-full reveal reveal-child clickable-tag transition-all duration-300 flex items-center gap-2`;
+                tag.className = `skill-tag border ${colorClass} py-2 px-4 rounded-full reveal reveal-child clickable-tag transition-all duration-300 flex items-center gap-2 cursor-pointer`;
                 tag.innerHTML = `<span class="opacity-50 text-xs font-mono">[]</span> ${interest}`;
                 tag.style.setProperty('--delay', `${0.1 + index * 0.1}s`);
                 tag.addEventListener('click', () => openDetailModal(interestsData[interest]));
@@ -768,12 +765,12 @@
             
             const createCard = (cert) => {
                 const card = document.createElement('div');
-                card.className = 'certificate-card h-48 md:h-64 bg-[#161b22]/70 rounded-lg flex flex-col justify-end reveal';
+                card.className = 'certificate-card h-40 sm:h-48 md:h-64 bg-[#161b22]/70 rounded-lg flex flex-col justify-end reveal cursor-pointer relative overflow-hidden border border-green-500/20 hover:border-green-500/60 transition-all duration-300';
                 card.innerHTML = `
-                    <div class="card-bg" style="background-image: url('${cert.imageUrl}')"></div>
-                    <div class="card-content p-4">
-                        <h3 class="text-lg font-bold text-gray-100">${cert.title}</h3>
-                        <p class="text-sm text-gray-400">${cert.issuer}</p>
+                    <div class="card-bg absolute inset-0 bg-cover bg-center z-0" style="background-image: url('${cert.imageUrl}')"></div>
+                    <div class="relative z-10 w-full pt-10 pb-2 px-2 sm:p-4" style="background: linear-gradient(to top, rgba(22, 27, 34, 1) 10%, rgba(22, 27, 34, 0.85) 60%, transparent 100%);">
+                        <h3 class="text-[0.7rem] sm:text-lg font-bold text-gray-100 leading-tight mb-1">${cert.title}</h3>
+                        <p class="text-[0.6rem] sm:text-sm text-green-400 font-mono tracking-wider leading-none">${cert.issuer}</p>
                     </div>
                 `;
                 card.addEventListener('click', () => openDetailModal(cert));
@@ -1091,42 +1088,52 @@
             mobileNavList.innerHTML = '';
             const sections = document.querySelectorAll('main > section');
             
+            const icons = {
+                'about': '<svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 mx-auto stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>',
+                'resume': '<svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 mx-auto stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>',
+                'experience': '<svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 mx-auto stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>',
+                'certificates': '<svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 mx-auto stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path></svg>',
+                'education': '<svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 mx-auto stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>',
+                'skills': '<svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 mx-auto stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>',
+                'projects': '<svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 mx-auto stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path></svg>',
+                'interests': '<svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 mx-auto stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path></svg>',
+                'contact': '<svg class="w-6 h-6 sm:w-8 sm:h-8 mb-2 mx-auto stroke-current" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>'
+            };
+            
             sections.forEach((section, index) => {
                 const sectionId = section.id;
                 const h2 = section.querySelector('h2');
                 if(!h2) return;
-                const sectionTitle = h2.getAttribute('data-text');
-                const li = document.createElement('li');
-                li.className = 'mobile-nav-item';
-                li.style.transitionDelay = `${index * 0.08}s`;
-                li.innerHTML = `<a href="#${sectionId}" class="mobile-nav-link block w-full py-2 text-[clamp(14px,3vh,24px)] font-bold tracking-[0.1em] text-center uppercase hover:text-green-400 transition-colors" data-target="${sectionId}">
-                                    ${sectionTitle.replace('./', '').replace('.sh', '')}
-                                </a>`;
                 
-                // Add click listener so links actually close the menu on mobile!
+                let sectionTitle = h2.getAttribute('data-text');
+                sectionTitle = sectionTitle.replace('./', '').replace('.sh', '');
+                
+                const li = document.createElement('li');
+                
+                // If it's the last item (9th item, index 8), make it col-span-2 so it centers perfectly
+                const colSpan = (index === sections.length - 1 && sections.length % 2 !== 0) ? 'col-span-2' : '';
+                
+                li.className = `mobile-nav-item ${colSpan}`;
+                li.style.transitionDelay = `${index * 0.05}s`;
+                
+                const iconSvg = icons[sectionId] || icons['about']; // Fallback
+                
+                li.innerHTML = `<a href="#${sectionId}" class="mobile-nav-link flex flex-col justify-center items-center w-full h-full min-h-[90px] sm:min-h-[110px] bg-[#161b22]/70 border border-green-500/20 rounded-xl shadow-lg hover:border-green-400 hover:shadow-[0_0_15px_rgba(34,197,94,0.3)] hover:-translate-y-1 active:translate-y-0 transition-all duration-300 group" data-target="${sectionId}">
+                                    ${iconSvg}
+                                    <span class="text-[1.8vh] sm:text-sm font-bold tracking-wider text-center uppercase text-gray-300 group-hover:text-green-400 transition-colors">${sectionTitle}</span>
+                                </a>`;
+                                
                 li.addEventListener('click', (e) => {
                     e.preventDefault();
                     lenis.scrollTo(`#${sectionId}`, { offset: -80, duration: 0.8 });
                     
                     const mobileMenu = document.getElementById('mobile-menu');
                     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
-                    const mobileNavList = document.getElementById('mobile-nav-list');
                     
-                    document.body.style.overflow = '';
-                    if (mobileNavList) mobileNavList.classList.remove('mobile-menu-active');
-                    if (mobileMenu) {
-                        mobileMenu.classList.remove('opacity-100');
-                        mobileMenu.classList.add('opacity-0');
+                    // Trigger the exact same close logic as tapping the X button
+                    if (mobileMenuBtn && mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                        mobileMenuBtn.click();
                     }
-                    if (mobileMenuBtn) {
-                        mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
-                    }
-                    setTimeout(() => {
-                        if (mobileMenu) {
-                            mobileMenu.classList.add('hidden');
-                            mobileMenu.classList.remove('flex');
-                        }
-                    }, 300);
                 });
                 
                 mobileNavList.appendChild(li);

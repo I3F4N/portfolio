@@ -1,349 +1,299 @@
 <!DOCTYPE html>
-<html lang="en" class="scroll-smooth">
+
+<html class="scroll-smooth" lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Irfan Ahmad - Cybersecurity Portfolio</title>
-    
-    <!-- SEO & Meta Tags -->
-    <meta name="description" content="Portfolio of Irfan Ahmad, a 4th-year Computer Science student specializing in Cyber Security, Full-Stack Developer, and IT Consultant.">
-    <meta name="keywords" content="Irfan Ahmad, Cyber Security, Full-Stack Developer, DevOps, Network Administrator, Portfolio">
-    <meta name="author" content="Irfan Ahmad">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:title" content="Irfan Ahmad - Cybersecurity Portfolio">
-    <meta property="og:description" content="Portfolio of Irfan Ahmad, specializing in Cyber Security, Full-Stack Dev, and IT Infrastructure.">
-    <meta property="og:image" content="og_preview.png">
-    
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Irfan Ahmad - Cybersecurity Portfolio">
-    <meta name="twitter:description" content="Portfolio of Irfan Ahmad, specializing in Cyber Security, Full-Stack Dev, and IT Infrastructure.">
-    <meta name="twitter:image" content="og_preview.png">
-
-    <!-- Favicon (SVG for a green terminal prompt) -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22 fill=%22%2322c55e%22>></text></svg>">
-
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&family=Space+Grotesk:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css">
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Irfan Ahmad - Cybersecurity Portfolio</title>
+<!-- SEO & Meta Tags -->
+<meta content="Portfolio of Irfan Ahmad, a 4th-year Computer Science student specializing in Cyber Security, Full-Stack Developer, and IT Consultant." name="description"/>
+<meta content="Irfan Ahmad, Cyber Security, Full-Stack Developer, DevOps, Network Administrator, Portfolio" name="keywords"/>
+<meta content="Irfan Ahmad" name="author"/>
+<!-- Open Graph / Facebook -->
+<meta content="website" property="og:type"/>
+<meta content="Irfan Ahmad - Cybersecurity Portfolio" property="og:title"/>
+<meta content="Portfolio of Irfan Ahmad, specializing in Cyber Security, Full-Stack Dev, and IT Infrastructure." property="og:description"/>
+<meta content="og_preview.png" property="og:image"/>
+<!-- Twitter -->
+<meta content="summary_large_image" name="twitter:card"/>
+<meta content="Irfan Ahmad - Cybersecurity Portfolio" name="twitter:title"/>
+<meta content="Portfolio of Irfan Ahmad, specializing in Cyber Security, Full-Stack Dev, and IT Infrastructure." name="twitter:description"/>
+<meta content="og_preview.png" name="twitter:image"/>
+<!-- Favicon (SVG for a green terminal prompt) -->
+<link href="data:image/svg+xml,&lt;svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22&gt;&lt;text y=%22.9em%22 font-size=%2290%22 fill=%22%2322c55e%22&gt;&gt;&lt;/text&gt;&lt;/svg&gt;" rel="icon"/>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300;400;500;700&amp;family=Space+Grotesk:wght@300;400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="style.css" rel="stylesheet"/>
 </head>
 <body class="text-gray-100 overflow-x-hidden selection:bg-green-500/30 selection:text-green-200">
-    
-    <!-- Matrix Canvas sits absolutely in the background -->
-    <canvas id="matrix-canvas"></canvas>
-
-    <!-- Boot Sequence Overlay -->
-    <div id="boot-overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black transition-opacity duration-1000">
-        <div class="w-full max-w-3xl font-mono text-green-400 p-4 relative">
-            <div id="terminal-body" class="p-6 h-[400px] overflow-y-auto border border-green-500/20 rounded-xl bg-[#050505] shadow-[0_0_50px_rgba(34,197,94,0.1)] relative">
-                <div id="output"></div>
-                <div class="flex items-center mt-2">
-                    <span class="prompt"></span>
-                    <span id="command-input" class="flex-1 text-green-400 ml-2"></span>
-                    <span class="cursor animate-pulse">_</span>
-                </div>
-            </div>
-            
-            <!-- Boot progress indicator -->
-            <div id="boot-progress-container" class="mt-4 font-mono text-sm text-green-400/80 flex items-center gap-4 transition-opacity duration-300">
-                <span>SYS_LOAD:</span>
-                <div class="flex-1 h-1.5 bg-green-900/40 overflow-hidden rounded-full">
-                    <div id="boot-progress-bar" class="h-full bg-green-400 shadow-[0_0_10px_rgba(34,197,94,0.8)] transition-all duration-[50ms]" style="width: 0%"></div>
-                </div>
-                <span id="boot-progress-text" class="w-12 text-right">0%</span>
-            </div>
-            
-            <div id="skip-hint" class="text-center text-gray-500 text-xs mt-6 transition-opacity duration-500">
+<!-- Matrix Canvas sits absolutely in the background -->
+<canvas id="matrix-canvas"></canvas>
+<!-- Boot Sequence Overlay -->
+<div class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-black transition-opacity duration-1000" id="boot-overlay">
+<div class="w-full max-w-3xl font-mono text-green-400 p-4 relative">
+<div class="p-6 h-[400px] overflow-y-auto border border-green-500/20 rounded-xl bg-[#050505] shadow-[0_0_50px_rgba(34,197,94,0.1)] relative" id="terminal-body">
+<div id="output"></div>
+<div class="flex items-center mt-2">
+<span class="prompt"></span>
+<span class="flex-1 text-green-400 ml-2" id="command-input"></span>
+<span class="cursor animate-pulse">_</span>
+</div>
+</div>
+<!-- Boot progress indicator -->
+<div class="mt-4 font-mono text-sm text-green-400/80 flex items-center gap-4 transition-opacity duration-300" id="boot-progress-container">
+<span>SYS_LOAD:</span>
+<div class="flex-1 h-1.5 bg-green-900/40 overflow-hidden rounded-full">
+<div class="h-full bg-green-400 shadow-[0_0_10px_rgba(34,197,94,0.8)] transition-all duration-[50ms]" id="boot-progress-bar" style="width: 0%"></div>
+</div>
+<span class="w-12 text-right" id="boot-progress-text">0%</span>
+</div>
+<div class="text-center text-gray-500 text-xs mt-6 transition-opacity duration-500" id="skip-hint">
                 Press [Enter], [Esc] or Double-Tap to skip boot sequence
             </div>
-            
-            <div id="mute-button" class="absolute right-8 top-8 text-gray-500 hover:text-white transition-colors cursor-pointer z-50">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" />
-                </svg>
-            </div>
-        </div>
-    </div>
-
-    <!-- The Split-Screen Layout Wrapper -->
-    <div id="layout-wrapper" class="hidden opacity-0 transition-opacity duration-1000 w-full max-w-[1600px] mx-auto px-4 md:px-12 pb-12 md:pb-16 lg:pb-32 pt-12 lg:pt-32">
-    <!-- Mobile Navbar -->
-    <div class="fixed top-0 left-0 w-full bg-[#0d1117]/90 backdrop-blur-md border-b border-green-500/20 z-[70] lg:hidden flex justify-between items-center px-6 py-4" id="mobile-navbar">
-        <div class="flex items-center gap-2"><span class="text-green-400 font-mono font-bold tracking-widest text-sm">~/irfan</span><span id="mobile-section-indicator" class="text-gray-500 font-mono text-xs hidden lg:hidden">/</span><span class="animate-cursor-blink text-green-400 font-mono font-bold ml-1 hidden lg:hidden" id="mobile-cursor">_</span></div>
-        <div id="mobile-progress-bar" class="absolute bottom-0 left-0 h-[2px] bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] w-0 transition-all duration-150 ease-out z-[71]"></div>
-        <button id="mobile-menu-btn" class="text-green-400 focus:outline-none">
-            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-        </button>
-    </div>
-    
-    <!-- Mobile Fullscreen Menu -->
-    <div id="mobile-menu" class="fixed inset-0 bg-[#0d1117]/95 backdrop-blur-lg z-[60] hidden flex-col justify-center items-center opacity-0 transition-opacity duration-300">
-        <ul id="mobile-nav-list" class="h-[75vh] flex flex-col justify-center space-y-6 text-center font-mono tracking-widest text-gray-400 w-full mt-12">
-            <!-- Populated by JS -->
-        </ul>
-    </div>
-
-
-
-        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-32">
-            
-            <!-- Left Sticky Sidebar Navigation -->
-            <div class="lg:col-span-3 hidden lg:block">
-                <div class="sticky top-32 flex flex-col h-auto">
-                    <div class="overflow-y-auto no-scrollbar pr-4 relative flex flex-col font-mono">
-                        <div id="nav-frame" class="absolute left-0 w-full transition-all duration-300 pointer-events-none z-0" style="top: 0; height: 0; opacity: 0;">
-                            <!-- Cyberpunk HUD corner brackets -->
-                            <div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-green-400"></div>
-                            <div class="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-green-400"></div>
-                            <div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-green-400"></div>
-                            <div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-green-400"></div>
-                            <!-- Scanline/Targeting background -->
-                            <div class="absolute inset-0 bg-green-500/10 border-l border-r border-green-500/30 shadow-[inset_0_0_15px_rgba(34,197,94,0.15)]"></div>
-                        </div>
-                        <ul id="nav-list" class="space-y-1 relative z-10 w-full pb-12 list-none">
-                            <!-- Populated by JS minimap logic -->
-                        </ul>
-                    </div>
-                    
-                    </div>
-            </div>
-            <!-- Right Scrollable Content -->
-            <div class="lg:col-span-9">
-                <!-- The original main content block stripped of its old hidden class -->
-                <main id="main-content" class="w-full">
-            <section id="about" class="mb-24 md:mb-48 reveal">
-                <h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./about.sh">./about.sh</h2>
-                <div class="text-lg leading-relaxed bg-[#050505] border border-green-500/20 shadow-lg p-6 rounded-xl hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500">
-                    <p>Cybersecurity &amp; Infrastructure Professional with comprehensive expertise spanning network architecture, operating systems, and software development — from physical layer to application level. Strong foundation in PC hardware, OS internals, and networking fundamentals. Specializes in designing secure, scalable IT environments by embedding security into infrastructure and application design from the ground up, rather than treating it as an afterthought. Focused on delivering efficient, secure solutions that solve business problems without adding friction for end users.</p>
-                </div>
-            </section>
-
-            <section id="resume" class="mb-24 md:mb-48 reveal">
-                 <h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./resume.sh">./resume.sh</h2>
-                 <div class="bg-[#161b22]/70 p-6 sm:p-8 rounded-md border border-gray-700 text-center">
-                    <p class="text-lg mb-6">For a detailed, traditional overview of my qualifications and experience, please download my full resume.</p>
-                    <a href="Resume_Irfan.pdf" download class="inline-block bg-green-500/10 text-green-400 font-mono font-bold py-3 px-6 rounded-md border border-green-500/50 hover:bg-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-colors">
+<div class="absolute right-8 top-8 text-gray-500 hover:text-white transition-colors cursor-pointer z-50" id="mute-button">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+</div>
+</div>
+<!-- The Split-Screen Layout Wrapper -->
+<div class="hidden opacity-0 transition-opacity duration-1000 w-full max-w-[1600px] mx-auto px-4 md:px-12 pb-12 md:pb-16 lg:pb-32 pt-12 lg:pt-32" id="layout-wrapper">
+<!-- Mobile Navbar -->
+<div class="fixed top-0 left-0 w-full bg-[#0d1117]/90 backdrop-blur-md border-b border-green-500/20 z-[70] lg:hidden flex justify-between items-center px-6 py-4" id="mobile-navbar">
+<div class="flex items-center gap-2"><span class="text-green-400 font-mono font-bold tracking-widest text-sm">~/irfan</span><span class="text-gray-500 font-mono text-xs hidden lg:hidden" id="mobile-section-indicator">/</span><span class="animate-cursor-blink text-green-400 font-mono font-bold ml-1 hidden lg:hidden" id="mobile-cursor">_</span></div>
+<div class="absolute bottom-0 left-0 h-[2px] bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.8)] w-0 transition-all duration-150 ease-out z-[71]" id="mobile-progress-bar"></div>
+<button class="text-green-400 focus:outline-none" id="mobile-menu-btn">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M4 6h16M4 12h16M4 18h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+<!-- Mobile Fullscreen Menu -->
+<div class="fixed inset-0 bg-[#0d1117]/95 backdrop-blur-lg z-[60] hidden flex-col justify-center items-center opacity-0 transition-opacity duration-300" id="mobile-menu">
+<ul id="mobile-nav-list" class="grid grid-cols-2 gap-3 sm:gap-4 h-[75vh] w-full content-center font-mono tracking-widest text-gray-400 mt-8 sm:mt-12 px-4">
+<!-- Populated by JS -->
+</ul>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-32">
+<!-- Left Sticky Sidebar Navigation -->
+<div class="lg:col-span-3 hidden lg:block">
+<div class="sticky top-32 flex flex-col h-auto">
+<div class="overflow-y-auto no-scrollbar pr-4 relative flex flex-col font-mono">
+<div class="absolute left-0 w-full transition-all duration-300 pointer-events-none z-0" id="nav-frame" style="top: 0; height: 0; opacity: 0;">
+<!-- Cyberpunk HUD corner brackets -->
+<div class="absolute top-0 left-0 w-2 h-2 border-t-2 border-l-2 border-green-400"></div>
+<div class="absolute top-0 right-0 w-2 h-2 border-t-2 border-r-2 border-green-400"></div>
+<div class="absolute bottom-0 left-0 w-2 h-2 border-b-2 border-l-2 border-green-400"></div>
+<div class="absolute bottom-0 right-0 w-2 h-2 border-b-2 border-r-2 border-green-400"></div>
+<!-- Scanline/Targeting background -->
+<div class="absolute inset-0 bg-green-500/10 border-l border-r border-green-500/30 shadow-[inset_0_0_15px_rgba(34,197,94,0.15)]"></div>
+</div>
+<ul class="space-y-1 relative z-10 w-full pb-12 list-none" id="nav-list">
+<!-- Populated by JS minimap logic -->
+</ul>
+</div>
+</div>
+</div>
+<!-- Right Scrollable Content -->
+<div class="lg:col-span-9">
+<!-- The original main content block stripped of its old hidden class -->
+<main class="w-full" id="main-content">
+<section class="mb-24 md:mb-48 reveal" id="about">
+<h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./about.sh">./about.sh</h2>
+<div class="text-lg leading-relaxed bg-[#050505] border border-green-500/20 shadow-lg p-6 rounded-xl hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500">
+<p>Cybersecurity &amp; Infrastructure Professional with comprehensive expertise spanning network architecture, operating systems, and software development — from physical layer to application level. Strong foundation in PC hardware, OS internals, and networking fundamentals. Specializes in designing secure, scalable IT environments by embedding security into infrastructure and application design from the ground up, rather than treating it as an afterthought. Focused on delivering efficient, secure solutions that solve business problems without adding friction for end users.</p>
+</div>
+</section>
+<section class="mb-24 md:mb-48 reveal" id="resume">
+<h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./resume.sh">./resume.sh</h2>
+<div class="bg-[#161b22]/70 p-6 sm:p-8 rounded-md border border-gray-700 text-center">
+<p class="text-lg mb-6">For a detailed, traditional overview of my qualifications and experience, please download my full resume.</p>
+<a class="inline-block bg-green-500/10 text-green-400 font-mono font-bold py-3 px-6 rounded-md border border-green-500/50 hover:bg-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-colors" download="" href="Resume_Irfan.pdf">
                         Download Resume (PDF)
                     </a>
-                 </div>
-            </section>
-
-            <section id="experience" class="mb-24 md:mb-48 reveal">
-                <h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./experience.sh">./experience.sh</h2>
-                <div class="space-y-8">
-                     <!-- Sonet Role -->
-                    <div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.1s;">
-                        <div class="flex flex-col sm:flex-row items-center gap-8">
-                            <img src="sonet.png" alt="Sonet Logo" class="w-48 h-auto bg-white p-2 rounded-lg">
-                            <div>
-                                <h3 class="text-2xl font-bold text-gray-100">Network & Security Infrastructure Consultant</h3>
-                                <p class="text-gray-400 mb-2">Sonet Integrated Solutions (Titan Company Project) • Jan 2026 – Jun 2026 | Chikkaballapur</p>
-                                <ul class="list-disc list-inside text-gray-400 space-y-2 mt-4">
-                                    <li><strong class="text-gray-200">Enterprise Deployment:</strong> Engineered the complete Layer 1 to Layer 3 deployment of a 152-node enterprise IP CCTV network. Designed the physical fiber-optic backbone and server room architecture to eliminate physical security risks.</li>
-                                    <li><strong class="text-gray-200">Threat Neutralization (Internal DoS):</strong> Acted as the primary incident responder for a catastrophic campus-wide Layer 2 broadcast storm. Diagnosed the spanning tree failure and edge loop, isolated the compromised nodes, and restored 100% network availability with zero data loss.</li>
-                                    <li><strong class="text-gray-200">Topology Re-Architecture:</strong> Audited a vulnerable, legacy daisy-chain network topology and completely re-architected it into a highly resilient Hub-and-Spoke model. Enforced strict subnet isolation and VLAN tagging to prevent lateral propagation of edge-device failures and mitigate future STP vulnerabilities.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-
-                     <!-- CtrlWeb Role -->
-                    <div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.2s;">
-                        <div class="flex flex-col sm:flex-row items-center gap-8">
-                            <img src="ctrlweb.png" alt="CtrlWeb Logo" class="w-48 h-auto">
-                            <div>
-                                <h3 class="text-2xl font-bold text-gray-100">Founder</h3>
-                                <p class="text-gray-400 mb-2">CtrlWeb • June 2024 - Present</p>
-                                <p class="text-lg italic text-gray-400 mb-4 border-l-2 border-green-500/50 pl-4">"Driving Innovation and Growth"</p>
-                                <ul class="list-disc list-inside text-gray-400 space-y-2">
-                                    <li>Spearheaded the founding and scaling of an end-to-end IT consultancy, delivering a portfolio of web, software and infrastructure solutions.</li>
-                                    <li>Engineered a bespoke, multi-outlet Point-of-Sale (POS) system from the ground up using PHP/JS and Git.</li>
-                                    <li>Implemented and administered self-hosted n8n automation servers on Linux for multiple clients.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- E&P Role -->
-                    <div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.3s;">
-                        <div class="flex flex-col sm:flex-row items-center gap-8">
-                             <img src="e&p.PNG" alt="E&P Logo" class="w-48 h-auto rounded-lg">
-                            <div class="flex-1">
-                                <div class="mb-6">
-                                    <h3 class="text-2xl font-bold text-gray-100">Infrastructure Engineer</h3>
-                                    <p class="text-gray-400 mb-4">E&P International Ventures • Nov 2024 – Sep 2025</p>
-                                    <ul class="list-disc list-inside text-gray-400 space-y-2">
-                                        <li>Architected and deployed the comprehensive IT and network infrastructure for a new 13-outlet commercial campus in Shoolagiri and several distributed franchised outlets.</li>
-                                        <li>Evaluated, selected, and integrated the complete technology stack across the campus, including specialized Point-of-Sale (POS) systems.</li>
-                                        <li>Led the end-to-end development and deployment of the corporate website and managed ongoing IT initiatives.</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                     <!-- Basik Marketing Role -->
-                    <div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.4s;">
-                        <div>
-                            <h3 class="text-2xl font-bold text-gray-100">System and Network Security Admin Intern</h3>
-                            <p class="text-gray-400 mb-4">Basik Marketing Pvt. Ltd. • Jul 2024 – Oct 2024</p>
-                            <ul class="list-disc list-inside text-gray-400 space-y-2">
-                                <li>Managed core network infrastructure uptime and performance against threats, actively deploying backup link failover routing during critical power disruptions to eliminate dropped packets on live streams.</li>
-                                <li>Documented corporate IT systems and created comprehensive network diagrams to optimize the internal knowledge base.</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="certificates" class="mb-24 md:mb-48 reveal">
-                <h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./certificates.sh">./certificates.sh</h2>
-                <div class="relative w-full">
-<div id="certificates-container" class="overflow-hidden transition-[max-height] duration-700 ease-in-out relative">
-<div id="certificate-grid" class="grid grid-cols-2 lg:grid-cols-3 gap-8 pb-32">
-<!-- Certificates will be populated by JS -->
 </div>
-<div id="cert-fade" class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#000000] via-[#000000]/95 to-transparent transition-opacity duration-500 z-10"></div>
-<div id="toggle-certs-wrapper" class="absolute bottom-0 w-full flex justify-center pb-8 z-20 px-4 pointer-events-none">
-<button id="toggle-certs-btn" class="pointer-events-auto bg-[#0d1117] border border-green-500/40 text-green-400 font-mono text-sm py-3 px-8 rounded-full hover:bg-green-500/15 transition-all shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:shadow-[0_0_20px_rgba(34,197,94,0.25)]">Show More</button>
+</section>
+<section class="mb-24 md:mb-48 reveal" id="experience">
+<h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./experience.sh">./experience.sh</h2>
+<div class="space-y-8">
+<!-- Sonet Role -->
+<div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.1s;">
+<div class="flex flex-row sm:flex-row items-center sm:items-center gap-4 sm:gap-8 mb-4 sm:mb-6">
+<img alt="Sonet Logo" class="w-24 sm:w-48 h-auto bg-white p-2 rounded-lg object-contain" src="sonet.png"/>
+<div class="flex-1">
+<h3 class="text-lg sm:text-2xl font-bold text-gray-100 leading-tight">Network &amp; Security Infrastructure Consultant</h3>
+<p class="text-xs sm:text-base text-gray-400 mt-1 sm:mt-2">Sonet Integrated Solutions (Titan Company Project) • Jan 2026 – Jun 2026 | Chikkaballapur</p>
+</div>
+</div>
+<ul class="list-disc list-inside text-sm sm:text-base text-gray-400 space-y-2">
+<li><strong class="text-gray-200">Enterprise Deployment:</strong> Engineered the complete Layer 1 to Layer 3 deployment of a 152-node enterprise IP CCTV network. Designed the physical fiber-optic backbone and server room architecture to eliminate physical security risks.</li>
+<li><strong class="text-gray-200">Threat Neutralization (Internal DoS):</strong> Acted as the primary incident responder for a catastrophic campus-wide Layer 2 broadcast storm. Diagnosed the spanning tree failure and edge loop, isolated the compromised nodes, and restored 100% network availability with zero data loss.</li>
+<li><strong class="text-gray-200">Topology Re-Architecture:</strong> Audited a vulnerable, legacy daisy-chain network topology and completely re-architected it into a highly resilient Hub-and-Spoke model. Enforced strict subnet isolation and VLAN tagging to prevent lateral propagation of edge-device failures and mitigate future STP vulnerabilities.</li>
+</ul>
+</div>
+<!-- CtrlWeb Role -->
+<div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.2s;">
+<div class="flex flex-row sm:flex-row items-center sm:items-center gap-4 sm:gap-8 mb-4 sm:mb-6">
+<img alt="CtrlWeb Logo" class="w-24 sm:w-48 h-auto object-contain" src="ctrlweb.png"/>
+<div class="flex-1">
+<h3 class="text-lg sm:text-2xl font-bold text-gray-100 leading-tight">Founder</h3>
+<p class="text-xs sm:text-base text-gray-400 mt-1 sm:mt-2">CtrlWeb • June 2024 - Present</p>
+</div>
+</div>
+<p class="text-sm sm:text-lg italic text-gray-400 mb-4 border-l-2 border-green-500/50 pl-4">"Driving Innovation and Growth"</p>
+<ul class="list-disc list-inside text-sm sm:text-base text-gray-400 space-y-2">
+<li>Spearheaded the founding and scaling of an end-to-end IT consultancy, delivering a portfolio of web, software and infrastructure solutions.</li>
+<li>Engineered a bespoke, multi-outlet Point-of-Sale (POS) system from the ground up using PHP/JS and Git.</li>
+<li>Implemented and administered self-hosted n8n automation servers on Linux for multiple clients.</li>
+</ul>
+</div>
+<!-- E&P Role -->
+<div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.3s;">
+<div class="flex flex-row sm:flex-row items-center sm:items-center gap-4 sm:gap-8 mb-4 sm:mb-6">
+<img alt="E&amp;P Logo" class="w-24 sm:w-48 h-auto rounded-lg object-contain" src="e&amp;p.PNG"/>
+<div class="flex-1">
+<h3 class="text-lg sm:text-2xl font-bold text-gray-100 leading-tight">Infrastructure Engineer</h3>
+<p class="text-xs sm:text-base text-gray-400 mt-1 sm:mt-2">E&amp;P International Ventures • Nov 2024 – Sep 2025</p>
+</div>
+</div>
+<ul class="list-disc list-inside text-sm sm:text-base text-gray-400 space-y-2">
+<li>Architected and deployed the comprehensive IT and network infrastructure for a new 13-outlet commercial campus in Shoolagiri and several distributed franchised outlets.</li>
+<li>Evaluated, selected, and integrated the complete technology stack across the campus, including specialized Point-of-Sale (POS) systems.</li>
+<li>Led the end-to-end development and deployment of the corporate website and managed ongoing IT initiatives.</li>
+</ul>
+</div>
+<!-- Basik Marketing Role -->
+<div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.4s;">
+<div>
+<h3 class="text-2xl font-bold text-gray-100">System and Network Security Admin Intern</h3>
+<p class="text-gray-400 mb-4">Basik Marketing Pvt. Ltd. • Jul 2024 – Oct 2024</p>
+<ul class="list-disc list-inside text-gray-400 space-y-2">
+<li>Managed core network infrastructure uptime and performance against threats, actively deploying backup link failover routing during critical power disruptions to eliminate dropped packets on live streams.</li>
+<li>Documented corporate IT systems and created comprehensive network diagrams to optimize the internal knowledge base.</li>
+</ul>
 </div>
 </div>
 </div>
 </section>
-
-                        <section id="education" class="mb-24 md:mb-48 reveal">
-                <h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./education.sh">./education.sh</h2>
-                <div class="space-y-8">
-                     <!-- Garden City University -->
-                    <div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.1s;">
-                        <div class="flex flex-col sm:flex-row items-center gap-8">
-                            <img src="logos/gardencity.png" alt="Garden City University Logo" class="w-32 h-auto bg-white p-2 rounded-lg">
-                            <div>
-                                <h3 class="text-2xl font-bold text-gray-100">Garden City University</h3>
-                                <p class="text-gray-400 mb-2">2022 - 2026</p>
-                                <p class="text-lg italic text-gray-400 mb-4 border-l-2 border-green-500/50 pl-4">"Graduated with a B.Tech in Computer Science (IT-Cyber Security)"</p>
-                                <p class="text-gray-400">Successfully completed my degree with a specialization in Cyber Security, deepening my academic knowledge in the field and graduating with First Class Distinction (CGPA: 9.07 / 10.0).</p>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Presidency School -->
-                    <div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.2s;">
-                        <div class="flex flex-col sm:flex-row items-center gap-8">
-                            <img src="logos/presidency.png" alt="Presidency School Logo" class="w-32 h-auto bg-white p-2 rounded-lg">
-                            <div>
-                                <h3 class="text-2xl font-bold text-gray-100">Presidency School (Grades 1 - 12)</h3>
-                                <p class="text-gray-400 mb-2">Foundation</p>
-                                <p class="text-gray-400">Completed my schooling in the CBSE stream, choosing Science with Computer Science in 11th and 12th grade to build a strong technical foundation.</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            
-            <section id="skills" class="mb-24 md:mb-48 reveal">
-                <h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./skills.sh">./skills.sh</h2>
-                    <div id="skills-container" >
-                        <div id="skills-grid" class="flex flex-wrap gap-3 bg-[#050505] border border-green-500/20 shadow-lg p-6 rounded-xl hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500">
-                            <!-- Skills will be populated by JS -->
-                        </div>
-                    </div>
-            </section>
-
-            <section id="projects" class="mb-24 md:mb-48 reveal relative">
-                <h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./projects.sh">./projects.sh</h2>
-                    <div id="projects-container" class="overflow-hidden transition-[max-height] duration-700 ease-in-out relative" style="max-height: 900px;">
-                        <div id="project-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-32">
-                        </div>
-                        <div id="proj-fade" class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#000000] via-[#000000]/95 to-transparent transition-opacity duration-500 z-10"></div>
-                        <div class="absolute bottom-0 w-full flex justify-center pb-8 z-20 px-4 pointer-events-none">
-                            <button id="toggle-projects-btn" class="pointer-events-auto bg-[#0d1117] border border-green-500/40 text-green-400 font-mono text-sm py-3 px-8 rounded-full hover:bg-green-500/15 transition-all shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:shadow-[0_0_20px_rgba(34,197,94,0.25)]">Show More</button>
-                        </div>
-                    </div>
-            </section>
-            
-            <section id="interests" class="mb-24 md:mb-48 reveal">
-                <h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./interests.sh">./interests.sh</h2>
-                <div id="interests-grid" class="flex flex-wrap justify-center gap-4 bg-[#050505] border border-green-500/20 shadow-lg p-6 rounded-xl hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500">
-                    <!-- Interests will be populated by JS -->
-                </div>
-            </section>
-
-            <section id="contact" class="reveal">
-                <h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./contact.sh">./contact.sh</h2>
-                <div class="text-center bg-[#050505] border border-green-500/20 shadow-lg p-8 rounded-xl hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500">
-                    <p class="text-lg mb-4">Interested in collaborating? Let's connect.</p>
-                    <a href="mailto:irfu026@gmail.com" class="inline-block bg-green-500/10 text-green-400 font-mono font-bold py-3 px-6 rounded-md border border-green-500/50 hover:bg-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-colors mb-6">
+<section class="mb-24 md:mb-48 reveal" id="certificates">
+<h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./certificates.sh">./certificates.sh</h2>
+<div class="relative w-full">
+<div class="overflow-hidden transition-[max-height] duration-700 ease-in-out relative" id="certificates-container">
+<div class="grid grid-cols-2 lg:grid-cols-3 gap-8 pb-32" id="certificate-grid">
+<!-- Certificates will be populated by JS -->
+</div>
+<div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#000000] via-[#000000]/95 to-transparent transition-opacity duration-500 z-10" id="cert-fade"></div>
+<div class="absolute bottom-0 w-full flex justify-center pb-8 z-20 px-4 pointer-events-none" id="toggle-certs-wrapper">
+<button class="pointer-events-auto bg-[#0d1117] border border-green-500/40 text-green-400 font-mono text-sm py-3 px-8 rounded-full hover:bg-green-500/15 transition-all shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:shadow-[0_0_20px_rgba(34,197,94,0.25)]" id="toggle-certs-btn">Show More</button>
+</div>
+</div>
+</div>
+</section>
+<section class="mb-24 md:mb-48 reveal" id="education">
+<h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./education.sh">./education.sh</h2>
+<div class="space-y-8">
+<!-- Garden City University -->
+<div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.1s;">
+<div class="flex flex-row sm:flex-row items-center sm:items-center gap-4 sm:gap-8 mb-4 sm:mb-6"><img alt="Garden City University Logo" class="w-16 sm:w-32 h-auto bg-white p-2 rounded-lg object-contain" src="logos/gardencity.png"/><div class="flex-1"><h3 class="text-lg sm:text-2xl font-bold text-gray-100 leading-tight">Garden City University</h3><p class="text-xs sm:text-base text-gray-400 mt-1 sm:mt-2">2022 - 2026</p></div></div><p class="text-sm sm:text-lg italic text-gray-400 mb-4 border-l-2 border-green-500/50 pl-4">Successfully completed my degree with a specialization in Cyber Security, deepening my academic knowledge in the field and graduating with First Class Distinction (CGPA: 9.07 / 10.0).</p><p class="text-sm sm:text-lg italic text-gray-400 mb-4 border-l-2 border-green-500/50 pl-4">"Graduated with a B.Tech in Computer Science (IT-Cyber Security)"</p>
+</div>
+<!-- Presidency School -->
+<div class="experience-card bg-[#050505] border border-green-500/20 shadow-lg p-6 sm:p-8 rounded-xl reveal reveal-child hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" style="--delay: 0.2s;">
+<div class="flex flex-row sm:flex-row items-center sm:items-center gap-4 sm:gap-8 mb-4 sm:mb-6"><img alt="Presidency School Logo" class="w-16 sm:w-32 h-auto bg-white p-2 rounded-lg object-contain" src="logos/presidency.png"/><div class="flex-1"><h3 class="text-lg sm:text-2xl font-bold text-gray-100 leading-tight">Presidency School (Grades 1 - 12)</h3><p class="text-xs sm:text-base text-gray-400 mt-1 sm:mt-2">Foundation</p></div></div><p class="text-sm sm:text-lg italic text-gray-400 mb-4 border-l-2 border-green-500/50 pl-4">Completed my schooling in the CBSE stream, choosing Science with Computer Science in 11th and 12th grade to build a strong technical foundation.</p>
+</div>
+</div>
+</section>
+<section class="mb-24 md:mb-48 reveal" id="skills">
+<h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./skills.sh">./skills.sh</h2>
+<div id="skills-container">
+<div class="flex flex-wrap gap-3 bg-[#050505] border border-green-500/20 shadow-lg p-6 rounded-xl hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" id="skills-grid">
+<!-- Skills will be populated by JS -->
+</div>
+</div>
+</section>
+<section class="mb-24 md:mb-48 reveal relative" id="projects">
+<h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./projects.sh">./projects.sh</h2>
+<div class="overflow-hidden transition-[max-height] duration-700 ease-in-out relative" id="projects-container" style="max-height: 900px;">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-32" id="project-grid">
+</div>
+<div class="absolute bottom-0 left-0 w-full h-48 bg-gradient-to-t from-[#000000] via-[#000000]/95 to-transparent transition-opacity duration-500 z-10" id="proj-fade"></div>
+<div class="absolute bottom-0 w-full flex justify-center pb-8 z-20 px-4 pointer-events-none">
+<button class="pointer-events-auto bg-[#0d1117] border border-green-500/40 text-green-400 font-mono text-sm py-3 px-8 rounded-full hover:bg-green-500/15 transition-all shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:shadow-[0_0_20px_rgba(34,197,94,0.25)]" id="toggle-projects-btn">Show More</button>
+</div>
+</div>
+</section>
+<section class="mb-24 md:mb-48 reveal" id="interests">
+<h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./interests.sh">./interests.sh</h2>
+<div class="flex flex-wrap gap-3 bg-[#050505] border border-green-500/20 shadow-lg p-6 rounded-xl hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500" id="interests-grid">
+<!-- Interests will be populated by JS -->
+</div>
+</section>
+<section class="reveal" id="contact">
+<h2 class="glitch-title text-6xl lg:text-7xl font-bold tracking-tighter mb-12 text-green-400 border-b-2 border-green-400/30 pb-2" data-text="./contact.sh">./contact.sh</h2>
+<div class="text-center bg-[#050505] border border-green-500/20 shadow-lg p-8 rounded-xl hover:border-green-500/60 hover:-translate-y-2 hover:shadow-[0_0_30px_rgba(34,197,94,0.15)] transition-all duration-500">
+<p class="text-lg mb-4">Interested in collaborating? Let's connect.</p>
+<a class="inline-block bg-green-500/10 text-green-400 font-mono font-bold py-3 px-6 rounded-md border border-green-500/50 hover:bg-green-500/20 shadow-[0_0_15px_rgba(34,197,94,0.1)] hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] transition-colors mb-6" href="mailto:irfu026@gmail.com">
                         Send a Message
                     </a>
-                    <div class="flex justify-center space-x-8">
-                        <a href="https://github.com/i3f4n" target="_blank" rel="noopener noreferrer" class="social-icon" title="GitHub"><span class="sr-only">GitHub</span><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path fill-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" clip-rule="evenodd" /></svg></a>
-                        <a href="https://linkedin.com/in/irfanahmadblr" target="_blank" rel="noopener noreferrer" class="social-icon" title="LinkedIn"><span class="sr-only">LinkedIn</span><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
-                        <a href="mailto:irfu026@gmail.com" class="social-icon" title="Email"><span class="sr-only">Email</span><svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"/></svg></a>
-                    </div>
-                </div>
-            </section>
-        </main>
-            </div> <!-- end lg:col-span-9 -->
-        </div> <!-- end grid -->
-    </div> <!-- end layout-wrapper -->
-
-    
-    <!-- Floating Terminal Widget -->
-    <div id="floating-terminal-wrapper" class="fixed bottom-6 right-6 z-[90] font-mono">
-        
-        <!-- The Terminal Window (Hidden by default) -->
-        <div id="floating-terminal-window" class="hidden absolute bottom-16 right-0 w-[90vw] md:w-[400px] h-[60vh] md:h-[500px] bg-[#050505]/95 backdrop-blur-md border border-green-500/30 rounded-xl shadow-[0_0_40px_rgba(34,197,94,0.15)] flex flex-col overflow-hidden transition-all duration-300 transform origin-bottom-right">
-            <!-- Header -->
-            <div class="bg-gray-900/80 px-4 py-2 border-b border-green-500/20 flex justify-between items-center cursor-pointer" id="floating-terminal-header">
-                <span class="text-xs text-green-400/70">terminal@irfan-network:~</span>
-                <span class="text-gray-500 hover:text-white transition-colors" id="close-terminal-btn">&times;</span>
-            </div>
-            
-            <!-- Body -->
-            <div id="interactive-terminal" class="flex-1 p-4 overflow-y-auto no-scrollbar text-xs">
-                <div class="text-gray-500 mb-2">// Interactive Console</div>
-                <div class="text-gray-400 mb-4">Welcome to the network. Type <span class="text-green-400 font-bold">'help'</span> to see available commands.</div>
-                <div id="mini-output"></div>
-                <div class="flex items-center mt-2">
-                    <span class="text-green-400">irfan@:~$</span>
-                    <input type="text" id="mini-input" class="flex-1 bg-transparent border-none outline-none text-green-400 ml-2" autocomplete="off" spellcheck="false" />
-                </div>
-            </div>
-        </div>
-
-        <!-- The Floating Button -->
-        <button id="terminal-toggle-btn" class="w-14 h-14 bg-[#050505] border border-green-500/50 rounded-full flex items-center justify-center text-green-400 shadow-[0_0_20px_rgba(34,197,94,0.2)] hover:bg-green-500/10 hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:scale-105 transition-all duration-300">
-            >_
+<div class="flex justify-center space-x-8">
+<a class="social-icon" href="https://github.com/i3f4n" rel="noopener noreferrer" target="_blank" title="GitHub"><span class="sr-only">GitHub</span><svg aria-hidden="true" class="w-8 h-8" fill="currentColor" viewbox="0 0 24 24"><path clip-rule="evenodd" d="M12 2C6.477 2 2 6.477 2 12c0 4.418 2.865 8.168 6.839 9.49.5.092.682-.217.682-.482 0-.237-.009-.868-.014-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.031-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.203 2.398.1 2.651.64.7 1.03 1.595 1.03 2.688 0 3.848-2.338 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.001 10.001 0 0022 12c0-5.523-4.477-10-10-10z" fill-rule="evenodd"></path></svg></a>
+<a class="social-icon" href="https://linkedin.com/in/irfanahmadblr" rel="noopener noreferrer" target="_blank" title="LinkedIn"><span class="sr-only">LinkedIn</span><svg aria-hidden="true" class="w-8 h-8" fill="currentColor" viewbox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"></path></svg></a>
+<a class="social-icon" href="mailto:irfu026@gmail.com" title="Email"><span class="sr-only">Email</span><svg aria-hidden="true" class="w-8 h-8" fill="currentColor" viewbox="0 0 24 24"><path d="M22 6c0-1.1-.9-2-2-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6zm-2 0l-8 5-8-5h16zm0 12H4V8l8 5 8-5v10z"></path></svg></a>
+</div>
+</div>
+</section>
+</main>
+</div> <!-- end lg:col-span-9 -->
+</div> <!-- end grid -->
+</div> <!-- end layout-wrapper -->
+<!-- Floating Terminal Widget -->
+<div class="fixed bottom-6 right-6 z-[90] font-mono" id="floating-terminal-wrapper">
+<!-- The Terminal Window (Hidden by default) -->
+<div class="hidden absolute bottom-16 right-0 w-[90vw] md:w-[400px] h-[60vh] md:h-[500px] bg-[#050505]/95 backdrop-blur-md border border-green-500/30 rounded-xl shadow-[0_0_40px_rgba(34,197,94,0.15)] flex flex-col overflow-hidden transition-all duration-300 transform origin-bottom-right" id="floating-terminal-window">
+<!-- Header -->
+<div class="bg-gray-900/80 px-4 py-2 border-b border-green-500/20 flex justify-between items-center cursor-pointer" id="floating-terminal-header">
+<span class="text-xs text-green-400/70">terminal@irfan-network:~</span>
+<span class="text-gray-500 hover:text-white transition-colors" id="close-terminal-btn">×</span>
+</div>
+<!-- Body -->
+<div class="flex-1 p-4 overflow-y-auto no-scrollbar text-xs" id="interactive-terminal">
+<div class="text-gray-500 mb-2">// Interactive Console</div>
+<div class="text-gray-400 mb-4">Welcome to the network. Type <span class="text-green-400 font-bold">'help'</span> to see available commands.</div>
+<div id="mini-output"></div>
+<div class="flex items-center mt-2">
+<span class="text-green-400">irfan@:~$</span>
+<input autocomplete="off" class="flex-1 bg-transparent border-none outline-none text-green-400 ml-2" id="mini-input" spellcheck="false" type="text"/>
+</div>
+</div>
+</div>
+<!-- The Floating Button -->
+<button class="w-14 h-14 bg-[#050505] border border-green-500/50 rounded-full flex items-center justify-center text-green-400 shadow-[0_0_20px_rgba(34,197,94,0.2)] hover:bg-green-500/10 hover:shadow-[0_0_30px_rgba(34,197,94,0.4)] hover:scale-105 transition-all duration-300" id="terminal-toggle-btn">
+            &gt;_
         </button>
-        
-    </div>
-
-    <!-- Modals -->
-    <div id="detail-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-button">&times;</span>
-            <h3 id="modal-title" class="text-2xl font-bold text-green-400 mb-4"></h3>
-            <p id="modal-issuer" class="text-sm text-gray-400 -mt-3 mb-4"></p>
-            <p id="modal-description" class="text-gray-300 mb-4"></p>
-            <div id="modal-details">
-                <!-- Project details -->
-                <p class="text-gray-400 mb-4"><strong class="text-gray-100">Role:</strong> <span id="modal-role"></span></p>
-                <div id="modal-tech" class="flex flex-wrap gap-2"></div>
-                <a id="modal-link" href="#" target="_blank" rel="noopener noreferrer" class="mt-6 inline-block text-gray-100 hover:underline">Visit Website &rarr;</a>
-            </div>
-             <div id="modal-certificate-details">
-                 <!-- Certificate details -->
-                 <img id="modal-cert-image" src="" alt="Certificate Image" class="w-full h-auto rounded-md mb-4 border border-gray-600">
-                 <a id="modal-verify-link" href="#" target="_blank" rel="noopener noreferrer" class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-400 transition-colors">
+</div>
+<!-- Modals -->
+<div class="modal" id="detail-modal">
+<div class="modal-content">
+<span class="close-button">×</span>
+<h3 class="text-2xl font-bold text-green-400 mb-4" id="modal-title"></h3>
+<p class="text-sm text-gray-400 -mt-3 mb-4" id="modal-issuer"></p>
+<p class="text-gray-300 mb-4" id="modal-description"></p>
+<div id="modal-details">
+<!-- Project details -->
+<p class="text-gray-400 mb-4"><strong class="text-gray-100">Role:</strong> <span id="modal-role"></span></p>
+<div class="flex flex-wrap gap-2" id="modal-tech"></div>
+<a class="mt-6 inline-block text-gray-100 hover:underline" href="#" id="modal-link" rel="noopener noreferrer" target="_blank">Visit Website →</a>
+</div>
+<div id="modal-certificate-details">
+<!-- Certificate details -->
+<img alt="Certificate Image" class="w-full h-auto rounded-md mb-4 border border-gray-600" id="modal-cert-image" src=""/>
+<a class="mt-4 inline-block bg-blue-500 text-white font-bold py-2 px-4 rounded-md hover:bg-blue-400 transition-colors" href="#" id="modal-verify-link" rel="noopener noreferrer" target="_blank">
                     Verify Certificate
                 </a>
-            </div>
-        </div>
-    </div>
-
-    <!-- Scripts -->
-    <script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js" defer></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js" defer></script>
-    <script src="script.js?v=1782207410.444138" defer></script>
+</div>
+</div>
+</div>
+<!-- Scripts -->
+<script defer="" src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script defer="" src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.7.77/Tone.js"></script>
+<script defer="" src="script.js?v=1782225882.6096694"></script>
 </body>
 </html>

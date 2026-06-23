@@ -96,11 +96,7 @@
             will-change: transform;
             transform: translateZ(0); /* GPU layer promotion */
         }
-        .certificate-card .card-content {
-            position: relative;
-            z-index: 2;
-            background: linear-gradient(to top, rgba(22, 27, 34, 1) 20%, rgba(22, 27, 34, 0.8) 70%, rgba(22, 27, 34, 0.4));
-        }
+        
         #matrix-canvas {
             position: fixed;
             top: 0;
@@ -374,7 +370,7 @@
             }
 
             /* --- Cards --- */
-            .experience-card, .project-card, .certificate-card {
+            .experience-card, .project-card {
                 padding: 1.25rem !important;
             }
             .experience-card {
@@ -396,9 +392,7 @@
                 gap: 1rem !important;
                 align-items: flex-start !important;
             }
-            .experience-card .flex.flex-col {
-                flex-direction: row !important; /* Keep logo beside text on mobile */
-            }
+            
 
             /* --- Certificates --- */
             #certificates-container {
@@ -411,15 +405,9 @@
                 gap: 0.75rem !important;
                 grid-template-columns: repeat(2, 1fr) !important; /* 2 columns on mobile */
             }
-            .certificate-card .card-content h3 {
-                font-size: 0.8rem !important;
-            }
-            .certificate-card .card-content p {
-                font-size: 0.7rem !important;
-            }
-            .certificate-card .card-content {
-                padding: 0.5rem !important;
-            }
+            
+            
+            
 
             /* --- Skills grid --- */
             #skills-grid {
