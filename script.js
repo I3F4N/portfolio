@@ -28,11 +28,16 @@
 
         function playHoverSound() { if (!isMuted && audioInitialized) synth.triggerAttackRelease('C2', '8n'); }
         function playClickSound() { if (!isMuted && audioInitialized) synth.triggerAttackRelease('C4', '8n'); }
+        let lastTypeTime = 0;
         function playTypingSound() {
             if (!isMuted && audioInitialized) {
-                const pitch = ['C3', 'C#3', 'D3', 'D#3'][Math.floor(Math.random() * 4)];
-                typingSynth.triggerAttackRelease(pitch, '32n', Tone.now());
-                typingNoise.triggerAttack(Tone.now());
+                const now = performance.now();
+                if (now - lastTypeTime > 50) {
+                    const pitch = ['C3', 'C#3', 'D3', 'D#3'][Math.floor(Math.random() * 4)];
+                    typingSynth.triggerAttackRelease(pitch, '64n', Tone.now(), 0.5);
+                    typingNoise.triggerAttackRelease("64n", Tone.now(), 0.5);
+                    lastTypeTime = now;
+                }
             }
         }
 
@@ -789,7 +794,7 @@
                 const isPC = window.innerWidth >= 768;
                 if(toggleCertsBtn) toggleCertsBtn.parentElement.style.display = 'flex';
                 if (!certsExpanded) {
-                    certificatesContainer.style.maxHeight = isPC ? '850px' : '640px';
+                    certificatesContainer.style.maxHeight = isPC ? '850px' : '504px';
                     if(fadeEl) fadeEl.style.opacity = '1';
                     if(toggleCertsBtn) toggleCertsBtn.textContent = 'Show More';
                 } else {
@@ -823,7 +828,7 @@
             if (certsContainer) {
                 if (certsBtn) certsBtn.parentElement.style.display = 'flex';
                 if (!certsExpanded) {
-                    certsContainer.style.maxHeight = isPC ? '850px' : '640px';
+                    certsContainer.style.maxHeight = isPC ? '850px' : '504px';
                     if (certsFade) certsFade.style.opacity = '1';
                     if (certsBtn) certsBtn.textContent = 'Show More';
                 } else {
@@ -1101,7 +1106,7 @@
                 // Add click listener so links actually close the menu on mobile!
                 li.addEventListener('click', (e) => {
                     e.preventDefault();
-                    lenis.scrollTo(`#${sectionId}`, { offset: -80 });
+                    lenis.scrollTo(`#${sectionId}`, { offset: -80, duration: 0.8 });
                     
                     const mobileMenu = document.getElementById('mobile-menu');
                     const mobileMenuBtn = document.getElementById('mobile-menu-btn');

@@ -402,11 +402,7 @@
 
             /* --- Certificates --- */
             #certificates-container {
-                max-height: none !important;
                 padding-bottom: 1rem !important;
-            }
-            #cert-fade, #toggle-certs-wrapper {
-                display: none !important;
             }
             .certificate-card {
                 height: 10rem !important; /* Shorter on mobile */
