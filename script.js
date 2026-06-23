@@ -116,7 +116,7 @@
         let width = canvas.width = window.innerWidth;
         let height = canvas.height = window.innerHeight;
         const alphabet = 'アァカサタナハマヤャラワガザダバパイィキシチニヒミリヰギジヂビピウゥクスツヌフムユュルグズブヅプエェケセテネヘメレヱゲゼデベペオォコソトノホモヨョロヲゴゾドボポヴッンABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-        const fontSize = 16;
+        const fontSize = window.innerWidth < 768 ? 22 : 16; // Larger font on mobile = fewer calculations = better performance
         let columns = Math.floor(width / fontSize);
         let rainDrops = Array.from({ length: columns }).fill(1);
 
@@ -139,7 +139,7 @@
         let scrollTimeout = null;
         function animateMatrix(time) {
             if (isTabActive) {
-                const interval = isScrolling ? 80 : 33; // ~12fps while scrolling, ~30fps idle
+                const interval = 33; // Steady ~30fps
                 if (time - lastTime > interval) {
                     drawMatrix();
                     lastTime = time;
