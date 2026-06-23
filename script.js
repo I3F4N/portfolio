@@ -51,21 +51,32 @@
             }
         });
 
-        const lenis = new Lenis();
+        const lenis = new Lenis({
+            lerp: 0.07,
+            smoothWheel: true,
+            wheelMultiplier: 0.8,
+            touchMultiplier: 1.5,
+            infinite: false,
+        });
         function raf(time) {
             if (isTabActive) {
                 lenis.raf(time);
             }
             requestAnimationFrame(raf);
         }
-        lenis.on('scroll', handleParallax);
+        lenis.on('scroll', () => {
+            handleParallax();
+            isScrolling = true;
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => { isScrolling = false; }, 150);
+        });
         requestAnimationFrame(raf);
 
         // --- Mouse Spotlight Effect ---
         document.body.addEventListener('mousemove', e => {
             document.documentElement.style.setProperty('--x', e.clientX + 'px');
             document.documentElement.style.setProperty('--y', e.clientY + 'px');
-        });
+        }, { passive: true });
 
         const isTouchDevice = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
         function updateInteractiveElements() {
@@ -119,9 +130,12 @@
             }
         }
         let lastTime = 0;
+        let isScrolling = false;
+        let scrollTimeout = null;
         function animateMatrix(time) {
             if (isTabActive) {
-                if (time - lastTime > 33) { // ~30fps
+                const interval = isScrolling ? 80 : 33; // ~12fps while scrolling, ~30fps idle
+                if (time - lastTime > interval) {
                     drawMatrix();
                     lastTime = time;
                 }
@@ -142,17 +156,17 @@
         let commandIndex = 0;
         let charIndex = 0;
         let bootSequenceTimeout = null;
-        const outputEl = document.getElementById('output');
+        let outputEl = document.getElementById('output');
         const commandInputEl = document.getElementById('command-input');
         let terminalBody = document.getElementById('terminal-body');
 
         const commands = [
-            { cmd: 'Initializing kernel...', isCommand: false, delay: 100 },
-            { cmd: 'Loading network modules... OK', isCommand: false, delay: 80 },
-            { cmd: 'Mounting secure filesystem... OK', isCommand: false, delay: 80 },
-            { cmd: 'Starting firewall daemon... OK', isCommand: false, delay: 80 },
-            { cmd: 'Checking system integrity... PASSED', isCommand: false, delay: 100 },
-            { cmd: 'Establishing encrypted connection... OK', isCommand: false, delay: 150 },
+            { cmd: 'Initializing kernel...', isCommand: false, prompt: true, delay: 100 },
+            { cmd: 'Loading network modules... OK', isCommand: false, prompt: true, delay: 80 },
+            { cmd: 'Mounting secure filesystem... OK', isCommand: false, prompt: true, delay: 80 },
+            { cmd: 'Starting firewall daemon... OK', isCommand: false, prompt: true, delay: 80 },
+            { cmd: 'Checking system integrity... PASSED', isCommand: false, prompt: true, delay: 100 },
+            { cmd: 'Establishing encrypted connection... OK', isCommand: false, prompt: true, delay: 150 },
             { cmd: '', isCommand: false, delay: 200 },
             { cmd: './start-portfolio.sh', isCommand: true, delay: 300 },
         ];
@@ -418,27 +432,22 @@
         // --- Parallax Effect for Certificates ---
         let certCards = [];
         const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let parallaxTicking = false;
         function handleParallax() {
-            if (prefersReducedMotion.matches) return;
-            if (certCards.length === 0) certCards = document.querySelectorAll('.certificate-card .card-bg');
-            
-            const innerHeight = window.innerHeight;
-            
-            // Batch reads to avoid layout thrashing
-            const updates = [];
-            certCards.forEach(card => {
-                const rect = card.parentElement.getBoundingClientRect();
-                if (rect.top < innerHeight + 200 && rect.bottom > -200) {
-                    updates.push({ card, rectTop: rect.top });
+            if (prefersReducedMotion.matches || parallaxTicking) return;
+            parallaxTicking = true;
+            requestAnimationFrame(() => {
+                if (certCards.length === 0) certCards = document.querySelectorAll('.certificate-card .card-bg');
+                const innerHeight = window.innerHeight;
+                for (let i = 0; i < certCards.length; i++) {
+                    const card = certCards[i];
+                    const rect = card.parentElement.getBoundingClientRect();
+                    if (rect.top < innerHeight + 200 && rect.bottom > -200) {
+                        const movement = -(rect.top - innerHeight / 2) * 0.2;
+                        card.style.transform = `translateY(${Math.max(-50, Math.min(50, movement))}px)`;
+                    }
                 }
-            });
-            
-            // Batch writes
-            updates.forEach(({ card, rectTop }) => {
-                const speed = 0.2;
-                const movement = -(rectTop - innerHeight / 2) * speed;
-                const clampedMovement = Math.max(-50, Math.min(50, movement));
-                card.style.transform = `translateY(${clampedMovement}px)`;
+                parallaxTicking = false;
             });
         }
         
@@ -601,6 +610,8 @@
                     void mobileMenu.offsetWidth;
                     mobileMenu.classList.remove('opacity-0');
                     mobileMenu.classList.add('opacity-100');
+                    // Animate hamburger to X
+                    mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
                     // Populate if empty
                     if (mobileNavList.children.length === 0) {
                         const sections = document.querySelectorAll('main > section');
@@ -614,6 +625,7 @@
                                 lenis.scrollTo(`#${sectionId}`, { offset: -80 });
                                 mobileMenu.classList.remove('opacity-100');
                                 mobileMenu.classList.add('opacity-0');
+                                mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
                                 setTimeout(() => {
                                     mobileMenu.classList.add('hidden');
                                     mobileMenu.classList.remove('flex');
@@ -625,6 +637,8 @@
                 } else {
                     mobileMenu.classList.remove('opacity-100');
                     mobileMenu.classList.add('opacity-0');
+                    // Animate X back to hamburger
+                    mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
                     setTimeout(() => {
                         mobileMenu.classList.add('hidden');
                         mobileMenu.classList.remove('flex');
@@ -946,8 +960,14 @@
                             // Size the frame perfectly around the li
                             navFrame.style.top = top + 'px';
                             navFrame.style.height = height + 'px';
-                            
 
+                            // Update mobile section indicator
+                            const indicator = document.getElementById('mobile-section-indicator');
+                            if (indicator) {
+                                const sectionName = activeLinkEl.textContent.trim();
+                                indicator.textContent = '/ ' + sectionName.toLowerCase();
+                                indicator.classList.remove('hidden');
+                            }
                         }
                     } else {
                         navFrame.style.opacity = '0';

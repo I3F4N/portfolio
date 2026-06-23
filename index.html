@@ -61,14 +61,14 @@
     <div id="layout-wrapper" class="hidden opacity-0 transition-opacity duration-1000 w-full max-w-[1600px] mx-auto px-4 md:px-12 pb-12 md:pb-16 lg:pb-32 pt-12 lg:pt-32">
     <!-- Mobile Navbar -->
     <div class="fixed top-0 left-0 w-full bg-[#0d1117]/90 backdrop-blur-md border-b border-green-500/20 z-50 lg:hidden flex justify-between items-center px-6 py-4" id="mobile-navbar">
-        <div class="text-green-400 font-mono font-bold tracking-widest text-lg">~/irfan</div>
+        <div class="flex items-center gap-2"><span class="text-green-400 font-mono font-bold tracking-widest text-sm">~/irfan</span><span id="mobile-section-indicator" class="text-gray-500 font-mono text-xs hidden lg:hidden">/</span></div>
         <button id="mobile-menu-btn" class="text-green-400 focus:outline-none">
             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
         </button>
     </div>
     
     <!-- Mobile Fullscreen Menu -->
-    <div id="mobile-menu" class="fixed inset-0 bg-[#0d1117]/95 backdrop-blur-lg z-40 hidden items-center justify-center pt-16 opacity-0 transition-opacity duration-300">
+    <div id="mobile-menu" class="fixed inset-0 bg-[#0d1117]/95 backdrop-blur-lg z-[60] hidden items-center justify-center pt-16 opacity-0 transition-opacity duration-300">
         <ul id="mobile-nav-list" class="space-y-8 text-center font-mono text-xl tracking-widest text-gray-400">
             <!-- Populated by JS -->
         </ul>
