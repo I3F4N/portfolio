@@ -536,6 +536,7 @@
             'Android Dev': { title: 'Android Development', description: 'Basic experience in native Android app development using Java/Kotlin, with a focus on creating functional and user-friendly mobile applications.' },
             'Technical Support': { title: 'Technical Support', description: 'Proficient in diagnosing and resolving a wide range of hardware and software issues for users. Skilled in providing clear, friendly, and effective technical assistance to ensure smooth and reliable system operation.' },
             'PC Building': { title: 'PC Building', description: 'Experienced in custom PC building, from component selection and compatibility checking to assembly and performance tuning. Passionate about creating high-performance machines tailored for specific needs like gaming or development.' },
+            'Polyglot / Languages': { title: 'Polyglot / Languages', description: 'Fluent in over 8 languages. Completely fluent in English, Hindi, Malayalam, Kannada, Urdu, Tamil, and Jeseri. Able to speak and understand Japanese, possess basic conversational Arabic, and currently holding a B2 level in French.' },
         };
 
         const interestsData = {
@@ -544,6 +545,10 @@
             'Sneaker Enthusiast': { title: 'Sneaker Enthusiast', description: 'An avid collector of sneakers, appreciating the design, culture, and stories behind iconic and rare footwear. It\'s a hobby that blends style with history.' },
             'Perfume Collecting': { title: 'Perfume Collecting', description: 'Fascinated by the art of fragrance, I enjoy collecting and learning about different perfumes. This hobby involves understanding complex notes, composition, and the craft of perfumery.' },
             'PC Building': { title: 'PC Building', description: 'I enjoy the hands-on process of building custom PCs from scratch. It\'s a hobby that combines my love for high-performance hardware, problem-solving, and creating something powerful and unique.' },
+            'Football': { title: 'Football', description: 'A passionate football player and fan, enjoying both the physical demands and the strategic elements of the sport.' },
+            'Puzzle Solving': { title: 'Puzzle Solving', description: 'A dedicated puzzle solver with a particular interest in all types of Rubik\'s cubes. I enjoy the mental challenge and pattern recognition required to solve complex puzzles quickly.' },
+            'Travelling': { title: 'Travelling', description: 'I love exploring the ocean and mountains. I have travelled extensively throughout India, spending months at a time in places like Lakshadweep.' },
+            'Scuba Diving': { title: 'Scuba Diving', description: 'Passionate about exploring the underwater world. My travels to Lakshadweep and other coastal regions have fueled my love for scuba diving and marine environments.' },
         };
 
         const projects = [
@@ -641,26 +646,7 @@
                     mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
                     // Populate if empty
                     if (mobileNavList.children.length === 0) {
-                        const sections = document.querySelectorAll('main > section');
-                        sections.forEach(section => {
-                            const sectionId = section.id;
-                            const sectionTitle = section.querySelector('h2').getAttribute('data-text');
-                            const li = document.createElement('li');
-                            li.innerHTML = `<a href="#${sectionId}" class="block w-full py-4 uppercase hover:text-green-400 transition-colors">${sectionTitle.replace('./', '').replace('.sh', '')}</a>`;
-                            li.addEventListener('click', (e) => {
-                                e.preventDefault();
-                                lenis.scrollTo(`#${sectionId}`, { offset: -80 });
-                                mobileNavList.classList.remove('mobile-menu-active');
-                                mobileMenu.classList.remove('opacity-100');
-                                mobileMenu.classList.add('opacity-0');
-                                mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
-                                setTimeout(() => {
-                                    mobileMenu.classList.add('hidden');
-                                    mobileMenu.classList.remove('flex');
-                                }, 300);
-                            });
-                            mobileNavList.appendChild(li);
-                        });
+                        populateMobileNav();
                     }
                 } else {
                     mobileNavList.classList.remove('mobile-menu-active');
@@ -678,10 +664,20 @@
 
         function populateSkills() {
             skillsGrid.innerHTML = '';
+            const skillColors = [
+                'border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/10 hover:border-cyan-500/60 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)]',
+                'border-green-500/30 text-green-400 hover:bg-green-500/10 hover:border-green-500/60 hover:shadow-[0_0_15px_rgba(34,197,94,0.2)]',
+                'border-purple-500/30 text-purple-400 hover:bg-purple-500/10 hover:border-purple-500/60 hover:shadow-[0_0_15px_rgba(168,85,247,0.2)]',
+                'border-blue-500/30 text-blue-400 hover:bg-blue-500/10 hover:border-blue-500/60 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)]',
+                'border-pink-500/30 text-pink-400 hover:bg-pink-500/10 hover:border-pink-500/60 hover:shadow-[0_0_15px_rgba(236,72,153,0.2)]',
+                'border-orange-500/30 text-orange-400 hover:bg-orange-500/10 hover:border-orange-500/60 hover:shadow-[0_0_15px_rgba(249,115,22,0.2)]',
+                'border-teal-500/30 text-teal-400 hover:bg-teal-500/10 hover:border-teal-500/60 hover:shadow-[0_0_15px_rgba(20,184,166,0.2)]'
+            ];
             Object.keys(skillsData).forEach((skill, index) => {
                 const tag = document.createElement('span');
-                tag.className = 'skill-tag bg-gray-700 text-gray-300 py-2 px-4 rounded-full reveal reveal-child clickable-tag';
-                tag.textContent = skill;
+                const colorClass = skillColors[index % skillColors.length];
+                tag.className = `skill-tag bg-[#161b22]/50 border ${colorClass} py-2 px-4 rounded-full reveal reveal-child clickable-tag transition-all duration-300 flex items-center gap-2`;
+                tag.innerHTML = `<span class="opacity-50 text-xs font-mono">[]</span> ${skill}`;
                 tag.style.setProperty('--delay', `${0.1 + (index % 12) * 0.05}s`);
                 tag.addEventListener('click', () => openDetailModal(skillsData[skill]));
                 skillsGrid.appendChild(tag);
@@ -694,17 +690,21 @@
         function populateInterests() {
             interestsGrid.innerHTML = '';
             const interestColors = {
-                'Esports': 'bg-red-800/50 text-red-300',
-                'Gym & Powerlifting': 'bg-gray-600/50 text-gray-200',
-                'Sneaker Enthusiast': 'bg-purple-800/50 text-purple-300',
-                'Perfume Collecting': 'bg-pink-800/50 text-pink-300',
-                'PC Building': 'bg-blue-800/50 text-blue-300',
+                'Esports': 'border-red-500/40 text-red-400 bg-red-900/20 hover:bg-red-500/20 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)]',
+                'Gym & Powerlifting': 'border-gray-500/40 text-gray-300 bg-gray-800/40 hover:bg-gray-500/20 hover:shadow-[0_0_15px_rgba(156,163,175,0.2)]',
+                'Sneaker Enthusiast': 'border-purple-500/40 text-purple-400 bg-purple-900/20 hover:bg-purple-500/20 hover:shadow-[0_0_15px_rgba(168,85,247,0.2)]',
+                'Perfume Collecting': 'border-pink-500/40 text-pink-400 bg-pink-900/20 hover:bg-pink-500/20 hover:shadow-[0_0_15px_rgba(236,72,153,0.2)]',
+                'PC Building': 'border-blue-500/40 text-blue-400 bg-blue-900/20 hover:bg-blue-500/20 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)]',
+                'Football': 'border-orange-500/40 text-orange-400 bg-orange-900/20 hover:bg-orange-500/20 hover:shadow-[0_0_15px_rgba(249,115,22,0.2)]',
+                'Puzzle Solving': 'border-teal-500/40 text-teal-400 bg-teal-900/20 hover:bg-teal-500/20 hover:shadow-[0_0_15px_rgba(20,184,166,0.2)]',
+                'Travelling': 'border-indigo-500/40 text-indigo-400 bg-indigo-900/20 hover:bg-indigo-500/20 hover:shadow-[0_0_15px_rgba(99,102,241,0.2)]',
+                'Scuba Diving': 'border-cyan-500/40 text-cyan-400 bg-cyan-900/20 hover:bg-cyan-500/20 hover:shadow-[0_0_15px_rgba(6,182,212,0.2)]'
             };
             Object.keys(interestsData).forEach((interest, index) => {
                 const tag = document.createElement('span');
-                const colorClass = interestColors[interest] || 'bg-gray-800/50 text-gray-300';
-                tag.className = `skill-tag ${colorClass} py-2 px-4 rounded-full reveal reveal-child clickable-tag`;
-                tag.textContent = interest;
+                const colorClass = interestColors[interest] || 'border-gray-500/40 text-gray-300 bg-gray-800/40 hover:bg-gray-500/20';
+                tag.className = `skill-tag border ${colorClass} py-2 px-4 rounded-full reveal reveal-child clickable-tag transition-all duration-300 flex items-center gap-2`;
+                tag.innerHTML = `<span class="opacity-50 text-xs font-mono">[]</span> ${interest}`;
                 tag.style.setProperty('--delay', `${0.1 + index * 0.1}s`);
                 tag.addEventListener('click', () => openDetailModal(interestsData[interest]));
                 interestsGrid.appendChild(tag);
@@ -712,6 +712,7 @@
             });
         }
 
+        let projectsExpanded = false;
         function populateProjects() {
             projectGrid.innerHTML = '';
             projects.forEach((project, index) => {
@@ -724,8 +725,34 @@
                 projectGrid.appendChild(card);
                 revealObserver.observe(card);
             });
-            const toggleBtn = document.getElementById('toggle-projects-btn');
-            if (toggleBtn) toggleBtn.parentElement.style.display = 'none';
+            
+            const toggleProjectsBtn = document.getElementById('toggle-projects-btn');
+            const fadeEl = document.getElementById('proj-fade');
+            const projectsContainer = document.getElementById('projects-container');
+            
+            const updateLayout = () => {
+                const isPC = window.innerWidth >= 768;
+                if(toggleProjectsBtn) toggleProjectsBtn.parentElement.style.display = 'flex';
+                if (!projectsExpanded) {
+                    projectsContainer.style.maxHeight = isPC ? '900px' : '850px';
+                    if(fadeEl) fadeEl.style.opacity = '1';
+                    if(toggleProjectsBtn) toggleProjectsBtn.textContent = 'Show More';
+                } else {
+                    projectsContainer.style.maxHeight = '4000px';
+                    if(fadeEl) fadeEl.style.opacity = '0';
+                    if(toggleProjectsBtn) toggleProjectsBtn.textContent = 'Show Less';
+                }
+            };
+            
+            updateLayout();
+            
+            if (toggleProjectsBtn && !toggleProjectsBtn.dataset.bound) {
+                toggleProjectsBtn.dataset.bound = "true";
+                toggleProjectsBtn.addEventListener('click', () => {
+                    projectsExpanded = !projectsExpanded;
+                    updateLayout();
+                });
+            }
         }
 
         let certsExpanded = false;
@@ -754,24 +781,19 @@
             
             let toggleCertsBtn = document.getElementById('toggle-certs-btn');
             const fadeEl = document.getElementById('cert-fade');
+            const certificatesContainer = document.getElementById('certificates-container');
             
             const updateLayout = () => {
                 const isPC = window.innerWidth >= 768;
-                if (!isPC) {
-                    certificatesContainer.style.maxHeight = 'none';
-                    if(toggleCertsBtn) toggleCertsBtn.parentElement.style.display = 'none';
-                    if(fadeEl) fadeEl.style.opacity = '0';
+                if(toggleCertsBtn) toggleCertsBtn.parentElement.style.display = 'flex';
+                if (!certsExpanded) {
+                    certificatesContainer.style.maxHeight = isPC ? '850px' : '640px';
+                    if(fadeEl) fadeEl.style.opacity = '1';
+                    if(toggleCertsBtn) toggleCertsBtn.textContent = 'Show More';
                 } else {
-                    if(toggleCertsBtn) toggleCertsBtn.parentElement.style.display = 'flex';
-                    if (!certsExpanded) {
-                        certificatesContainer.style.maxHeight = '650px';
-                        if(fadeEl) fadeEl.style.opacity = '1';
-                        if(toggleCertsBtn) toggleCertsBtn.textContent = 'Show More';
-                    } else {
-                        certificatesContainer.style.maxHeight = '4000px';
-                        if(fadeEl) fadeEl.style.opacity = '0';
-                        if(toggleCertsBtn) toggleCertsBtn.textContent = 'Show Less';
-                    }
+                    certificatesContainer.style.maxHeight = '4000px';
+                    if(fadeEl) fadeEl.style.opacity = '0';
+                    if(toggleCertsBtn) toggleCertsBtn.textContent = 'Show Less';
                 }
             };
             
@@ -788,28 +810,41 @@
             
         }
 
-        // Resize listener for certificates layout (added once)
-        let certsResizeHandler = null;
+        // Resize listener for responsive layouts
         window.addEventListener('resize', () => {
             const isPC = window.innerWidth >= 768;
-            const container = document.getElementById('certificates-container');
-            const fadeEl = document.getElementById('cert-fade');
-            const btn = document.getElementById('toggle-certs-btn');
-            if (!container) return;
-            if (!isPC) {
-                container.style.maxHeight = 'none';
-                if(btn) btn.parentElement.style.display = 'none';
-                if(fadeEl) fadeEl.style.opacity = '0';
-            } else {
-                if(btn) btn.parentElement.style.display = 'flex';
+            
+            // Certificates
+            const certsContainer = document.getElementById('certificates-container');
+            const certsFade = document.getElementById('cert-fade');
+            const certsBtn = document.getElementById('toggle-certs-btn');
+            if (certsContainer) {
+                if (certsBtn) certsBtn.parentElement.style.display = 'flex';
                 if (!certsExpanded) {
-                    container.style.maxHeight = '650px';
-                    if(fadeEl) fadeEl.style.opacity = '1';
-                    if(btn) btn.textContent = 'Show More';
+                    certsContainer.style.maxHeight = isPC ? '850px' : '640px';
+                    if (certsFade) certsFade.style.opacity = '1';
+                    if (certsBtn) certsBtn.textContent = 'Show More';
                 } else {
-                    container.style.maxHeight = '4000px';
-                    if(fadeEl) fadeEl.style.opacity = '0';
-                    if(btn) btn.textContent = 'Show Less';
+                    certsContainer.style.maxHeight = '4000px';
+                    if (certsFade) certsFade.style.opacity = '0';
+                    if (certsBtn) certsBtn.textContent = 'Show Less';
+                }
+            }
+            
+            // Projects
+            const projContainer = document.getElementById('projects-container');
+            const projFade = document.getElementById('proj-fade');
+            const projBtn = document.getElementById('toggle-projects-btn');
+            if (projContainer) {
+                if (projBtn) projBtn.parentElement.style.display = 'flex';
+                if (!projectsExpanded) {
+                    projContainer.style.maxHeight = isPC ? '900px' : '850px';
+                    if (projFade) projFade.style.opacity = '1';
+                    if (projBtn) projBtn.textContent = 'Show More';
+                } else {
+                    projContainer.style.maxHeight = '4000px';
+                    if (projFade) projFade.style.opacity = '0';
+                    if (projBtn) projBtn.textContent = 'Show Less';
                 }
             }
         });
@@ -1057,8 +1092,8 @@
                 const li = document.createElement('li');
                 li.className = 'mobile-nav-item';
                 li.style.transitionDelay = `${index * 0.08}s`;
-                li.innerHTML = `<a href="#${sectionId}" class="mobile-nav-link block hover:text-white transition-colors" data-target="${sectionId}">
-                                    <span class="mr-2 opacity-50">0${index + 1}.</span>${sectionTitle}
+                li.innerHTML = `<a href="#${sectionId}" class="mobile-nav-link block py-4 text-3xl font-bold tracking-[0.1em] text-center uppercase hover:text-green-400 transition-colors" data-target="${sectionId}">
+                                    <span class="mr-3 opacity-30 text-xl font-mono block mb-1">0${index + 1}.</span>${sectionTitle.replace('./', '').replace('.sh', '')}
                                 </a>`;
                 
                 // Add click listener so links actually close the menu on mobile!
