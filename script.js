@@ -644,6 +644,7 @@
                     setTimeout(() => mobileNavList.classList.add('mobile-menu-active'), 50);
                     // Animate hamburger to X
                     mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>';
+                    document.body.style.overflow = 'hidden';
                     // Populate if empty
                     if (mobileNavList.children.length === 0) {
                         populateMobileNav();
@@ -654,6 +655,7 @@
                     mobileMenu.classList.add('opacity-0');
                     // Animate X back to hamburger
                     mobileMenuBtn.innerHTML = '<svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>';
+                    document.body.style.overflow = '';
                     setTimeout(() => {
                         mobileMenu.classList.add('hidden');
                         mobileMenu.classList.remove('flex');
@@ -1092,7 +1094,7 @@
                 const li = document.createElement('li');
                 li.className = 'mobile-nav-item';
                 li.style.transitionDelay = `${index * 0.08}s`;
-                li.innerHTML = `<a href="#${sectionId}" class="mobile-nav-link block py-4 text-3xl font-bold tracking-[0.1em] text-center uppercase hover:text-green-400 transition-colors" data-target="${sectionId}">
+                li.innerHTML = `<a href="#${sectionId}" class="mobile-nav-link block py-2 text-xl md:text-2xl font-bold tracking-[0.1em] text-center uppercase hover:text-green-400 transition-colors" data-target="${sectionId}">
                                     <span class="mr-3 opacity-30 text-xl font-mono block mb-1">0${index + 1}.</span>${sectionTitle.replace('./', '').replace('.sh', '')}
                                 </a>`;
                 
@@ -1105,6 +1107,7 @@
                     const mobileMenuBtn = document.getElementById('mobile-menu-btn');
                     const mobileNavList = document.getElementById('mobile-nav-list');
                     
+                    document.body.style.overflow = '';
                     if (mobileNavList) mobileNavList.classList.remove('mobile-menu-active');
                     if (mobileMenu) {
                         mobileMenu.classList.remove('opacity-100');
